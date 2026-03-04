@@ -3,212 +3,393 @@ import { Link } from 'react-router-dom'
 import {
   Activity, ArrowRight, PlayCircle,
   Zap, Brain, Heart, Apple, BatteryCharging, Smile, Droplets,
-  ClipboardCheck, UserPlus, LayoutDashboard,
+  ClipboardCheck, UserPlus, LayoutDashboard, CheckCircle,
 } from 'lucide-react'
+import { motion } from 'framer-motion'
 import styles from './Home.module.css'
 
+const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1767884022378-7909a74a15ab?w=700&q=85&crop=entropy&cs=srgb'
+const WELLBEING_IMAGE =
+  'https://images.unsplash.com/photo-1769238507274-59e0db6c6bbe?w=600&q=80&crop=entropy&cs=srgb'
+
+// ─── Animation Variants ────────────────────────────────────────────────────
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+}
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+}
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.88 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+}
+
+const slideUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+}
+
+// ─── Component ─────────────────────────────────────────────────────────────
 const Home: React.FC = () => {
   return (
     <div className={styles.container}>
-      {/* Hero Section */}
+
+      {/* ═══ HERO ══════════════════════════════════════════════════════════ */}
       <section className={styles.hero}>
-        <div className={styles.heroGlow}></div>
-        <div className={styles.heroContent}>
-          <div className={styles.badge}>
-            <span className={styles.badgeIcon}>&#127895;</span> Mes de Concientizaci&oacute;n en Endometriosis
-          </div>
-          <h1 className={styles.title}>No es &quot;s&oacute;lo un c&oacute;lico&quot;. Es hora de validarlo.</h1>
-          <p className={styles.subtitle}>
-            1 de cada 10 mujeres vive con endometriosis, muchas sin diagn&oacute;stico.
-            En Saude Cl&iacute;nica de la Mujer, te ayudamos a entender tu dolor y tomar el control de tu salud.
-          </p>
-          <div className={styles.heroActions}>
-            <Link to="/questionnaire" className={styles.primaryButton}>
-              Evaluar mi dolor ahora <ArrowRight size={18} />
-            </Link>
-          </div>
+        <div className={styles.blobTopRight} />
+        <div className={styles.blobBottomLeft} />
+
+        <div className={styles.heroInner}>
+          {/* Left: Text */}
+          <motion.div
+            className={styles.heroText}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div className={styles.badge} variants={fadeUp}>
+              <span className={styles.badgePulse} />
+              <span>&#127895; Mes de Concientización en Endometriosis</span>
+            </motion.div>
+
+            <motion.h1 className={styles.title} variants={fadeUp}>
+              No es <span className={styles.highlight}>&quot;solo un cólico&quot;</span>.<br />
+              Es hora de validarlo.
+            </motion.h1>
+
+            <motion.p className={styles.subtitle} variants={fadeUp}>
+              1 de cada 10 mujeres vive con endometriosis, muchas sin diagnóstico.
+              En Saude Clínica de la Mujer, te ayudamos a entender tu dolor y tomar el control de tu salud.
+            </motion.p>
+
+            <motion.div className={styles.heroActions} variants={fadeUp}>
+              <Link to="/questionnaire" data-testid="hero-cta-btn" className={styles.primaryButton}>
+                Evaluar mi dolor ahora <ArrowRight size={18} />
+              </Link>
+            </motion.div>
+
+            <motion.div className={styles.heroTrustBadges} variants={fadeUp}>
+              <div className={styles.trustBadge}>
+                <CheckCircle size={15} color="var(--color-success)" />
+                <span>Gratuito</span>
+              </div>
+              <div className={styles.trustBadge}>
+                <CheckCircle size={15} color="var(--color-success)" />
+                <span>Resultado inmediato</span>
+              </div>
+              <div className={styles.trustBadge}>
+                <CheckCircle size={15} color="var(--color-success)" />
+                <span>Basado en evidencia</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right: Image */}
+          <motion.div
+            className={styles.heroImageWrapper}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+          >
+            <motion.img
+              src={HERO_IMAGE}
+              alt="Mujer en bienestar y esperanza"
+              className={styles.heroImg}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }}
+            />
+            {/* Floating card: emotion */}
+            <motion.div
+              className={`${styles.floatingCard} ${styles.floatingCardRight}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+            >
+              <span className={styles.floatingIconWrap} style={{ background: 'rgba(231,111,81,0.12)' }}>
+                <Heart size={18} color="var(--color-accent)" />
+              </span>
+              <div>
+                <p className={styles.floatingTitle}>Tu dolor es real</p>
+                <p className={styles.floatingSubtitle}>y tiene solución</p>
+              </div>
+            </motion.div>
+            {/* Floating card: stat */}
+            <motion.div
+              className={`${styles.floatingCard} ${styles.floatingCardLeft}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.3, duration: 0.5 }}
+            >
+              <span className={styles.floatingIconWrap} style={{ background: 'rgba(16,93,119,0.1)' }}>
+                <Activity size={18} color="var(--color-primary)" />
+              </span>
+              <div>
+                <p className={styles.floatingTitle}>190M mujeres</p>
+                <p className={styles.floatingSubtitle}>afectadas en el mundo</p>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* What is Endometriosis */}
+      {/* ═══ STATS ══════════════════════════════════════════════════════════ */}
+      <section className={styles.statsSection}>
+        <motion.div
+          className={styles.statsGrid}
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.4 }}
+        >
+          <motion.div className={styles.statCard} variants={scaleIn}>
+            <span className={styles.statNumber}>190M</span>
+            <span className={styles.statLabel}>Mujeres afectadas en el mundo</span>
+          </motion.div>
+          <motion.div className={styles.statCard} variants={scaleIn}>
+            <span className={styles.statNumber}>7-12</span>
+            <span className={styles.statLabel}>Años promedio para diagnóstico</span>
+          </motion.div>
+          <motion.div className={styles.statCard} variants={scaleIn}>
+            <span className={styles.statNumber}>70%</span>
+            <span className={styles.statLabel}>Reportan dolor crónico pélvico</span>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ═══ WHAT IS ENDOMETRIOSIS ════════════════════════════════════════ */}
       <section className={styles.infoSection}>
         <div className={styles.infoContainer}>
-          <div className={styles.infoHeader}>
-            <h2>&iquest;Qu&eacute; es la endometriosis?</h2>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2>¿Qué es la endometriosis?</h2>
             <p>
-              La endometriosis es una enfermedad cr&oacute;nica donde tejido similar al endometrio crece fuera del &uacute;tero,
-              causando dolor, inflamaci&oacute;n y adherencias. Afecta a <strong>1 de cada 10 mujeres</strong> en edad reproductiva
-              y el diagn&oacute;stico tarda en promedio <strong>7 a 12 a&ntilde;os</strong>.
+              La endometriosis es una enfermedad crónica donde tejido similar al endometrio crece fuera del útero,
+              causando dolor, inflamación y adherencias. Afecta a <strong>1 de cada 10 mujeres</strong> en edad reproductiva
+              y el diagnóstico tarda en promedio <strong>7 a 12 años</strong>.
             </p>
-          </div>
-
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <span className={styles.statNumber}>190M</span>
-              <span className={styles.statLabel}>Mujeres afectadas en el mundo</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statNumber}>7-12</span>
-              <span className={styles.statLabel}>A&ntilde;os promedio para diagn&oacute;stico</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statNumber}>70%</span>
-              <span className={styles.statLabel}>Reportan dolor cr&oacute;nico p&eacute;lvico</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 3 Types of Pain */}
+      {/* ═══ 3 PAIN TYPES ═══════════════════════════════════════════════════ */}
       <section className={styles.painSection}>
         <div className={styles.infoContainer}>
-          <div className={styles.infoHeader}>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h2>Los 3 tipos de dolor en endometriosis</h2>
             <p>Entender el tipo de dolor (fenotipo) es el primer paso hacia un tratamiento efectivo y personalizado.</p>
-          </div>
+          </motion.div>
 
-          <div className={styles.grid}>
-            <div className={styles.card}>
+          <motion.div
+            className={styles.grid}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            <motion.div
+              className={`${styles.card} ${styles.cardInfo}`}
+              variants={slideUp}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+            >
               <div className={`${styles.iconWrapper} ${styles.bgInfo}`}>
                 <Activity size={24} color="var(--color-info)" />
               </div>
               <h3>Nociceptivo (Inflamatorio)</h3>
               <p>
-                Dolor directamente causado por inflamaci&oacute;n y lesiones de endometriosis.
-                Se manifiesta como c&oacute;licos intensos, sensibilidad abdominal y dolor que empeora con la menstruaci&oacute;n.
+                Dolor directamente causado por inflamación y lesiones de endometriosis.
+                Se manifiesta como cólicos intensos, sensibilidad abdominal y dolor que empeora con la menstruación.
                 El tratamiento se enfoca en antiinflamatorios y terapia hormonal.
               </p>
-            </div>
+            </motion.div>
 
-            <div className={styles.card}>
+            <motion.div
+              className={`${styles.card} ${styles.cardAccent}`}
+              variants={slideUp}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+            >
               <div className={`${styles.iconWrapper} ${styles.bgAccent}`}>
                 <Zap size={24} color="var(--color-accent)" />
               </div>
-              <h3>Neurop&aacute;tico (Nervioso)</h3>
+              <h3>Neuropático (Nervioso)</h3>
               <p>
-                Los nervios p&eacute;lvicos est&aacute;n siendo afectados o sensibilizados.
-                Se siente como ardor, descargas el&eacute;ctricas, dolor punzante que irradia a piernas o espalda.
-                Requiere neuromoduladores y evaluaci&oacute;n especializada.
+                Los nervios pélvicos están siendo afectados o sensibilizados.
+                Se siente como ardor, descargas eléctricas, dolor punzante que irradia a piernas o espalda.
+                Requiere neuromoduladores y evaluación especializada.
               </p>
-            </div>
+            </motion.div>
 
-            <div className={styles.card}>
+            <motion.div
+              className={`${styles.card} ${styles.cardSuccess}`}
+              variants={slideUp}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+            >
               <div className={`${styles.iconWrapper} ${styles.bgSuccess}`}>
                 <Brain size={24} color="var(--color-success)" />
               </div>
-              <h3>Nocipl&aacute;stico (Sensibilizaci&oacute;n)</h3>
+              <h3>Nociplástico (Sensibilización)</h3>
               <p>
-                El sistema nervioso central amplifica las se&ntilde;ales de dolor.
-                Se manifiesta como fatiga extrema, dolor difuso, problemas de sue&ntilde;o y sensibilidad aumentada.
+                El sistema nervioso central amplifica las señales de dolor.
+                Se manifiesta como fatiga extrema, dolor difuso, problemas de sueño y sensibilidad aumentada.
                 Requiere un abordaje multidisciplinario mente-cuerpo.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 5 Pillars */}
+      {/* ═══ 5 PILLARS ══════════════════════════════════════════════════════ */}
       <section className={styles.pillarsSection}>
         <div className={styles.infoContainer}>
-          <div className={styles.infoHeader}>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h2>Nuestro enfoque: 5 Pilares de Salud</h2>
-            <p>Un abordaje integral que va m&aacute;s all&aacute; de los medicamentos para mejorar tu calidad de vida.</p>
-          </div>
+            <p>Un abordaje integral que va más allá de los medicamentos para mejorar tu calidad de vida.</p>
+          </motion.div>
 
-          <div className={styles.pillarsGrid}>
-            <div className={styles.pillarItem}>
-              <div className={styles.pillarIcon} style={{ backgroundColor: 'rgba(16, 93, 119, 0.1)', color: 'var(--color-primary)' }}>
-                <Heart size={24} />
+          <div className={styles.pillarsLayout}>
+            {/* Image Panel */}
+            <motion.div
+              className={styles.pillarsImagePanel}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.75, ease: 'easeOut' }}
+            >
+              <img src={WELLBEING_IMAGE} alt="Mujer meditando en bienestar" className={styles.pillarsImg} />
+              <div className={styles.pillarsImgOverlay}>
+                <h3>Tu bienestar integral</h3>
+                <p>Un plan personalizado basado en tu fenotipo de dolor</p>
               </div>
-              <h4>Maneja tu Dolor</h4>
-              <p>TENS, suelo p&eacute;lvico, manejo farmacol&oacute;gico</p>
-            </div>
-            <div className={styles.pillarItem}>
-              <div className={styles.pillarIcon} style={{ backgroundColor: 'rgba(42, 157, 143, 0.1)', color: 'var(--color-success)' }}>
-                <BatteryCharging size={24} />
-              </div>
-              <h4>Recupera tu Energ&iacute;a</h4>
-              <p>Higiene del sue&ntilde;o, suplementos, ejercicio</p>
-            </div>
-            <div className={styles.pillarItem}>
-              <div className={styles.pillarIcon} style={{ backgroundColor: 'rgba(244, 162, 97, 0.1)', color: 'var(--color-secondary)' }}>
-                <Apple size={24} />
-              </div>
-              <h4>Cuida tu Alimentaci&oacute;n</h4>
-              <p>Dieta antiinflamatoria, endo belly, nutrientes</p>
-            </div>
-            <div className={styles.pillarItem}>
-              <div className={styles.pillarIcon} style={{ backgroundColor: 'rgba(69, 123, 157, 0.1)', color: 'var(--color-info)' }}>
-                <Droplets size={24} />
-              </div>
-              <h4>Equilibra tus Hormonas</h4>
-              <p>Ciclo menstrual, fertilidad, balance hormonal</p>
-            </div>
-            <div className={styles.pillarItem}>
-              <div className={styles.pillarIcon} style={{ backgroundColor: 'rgba(231, 111, 81, 0.1)', color: 'var(--color-accent)' }}>
-                <Smile size={24} />
-              </div>
-              <h4>Fortalece tu Bienestar</h4>
-              <p>Salud mental, mindfulness, apoyo emocional</p>
-            </div>
+            </motion.div>
+
+            {/* Pillars List */}
+            <motion.div
+              className={styles.pillarsGrid}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+            >
+              {[
+                { icon: <Heart size={20} />, title: 'Maneja tu Dolor', sub: 'TENS, suelo pélvico, manejo farmacológico', bg: 'rgba(16,93,119,0.1)', color: 'var(--color-primary)' },
+                { icon: <BatteryCharging size={20} />, title: 'Recupera tu Energía', sub: 'Higiene del sueño, suplementos, ejercicio', bg: 'rgba(42,157,143,0.1)', color: 'var(--color-success)' },
+                { icon: <Apple size={20} />, title: 'Cuida tu Alimentación', sub: 'Dieta antiinflamatoria, endo belly, nutrientes', bg: 'rgba(244,162,97,0.1)', color: 'var(--color-secondary)' },
+                { icon: <Droplets size={20} />, title: 'Equilibra tus Hormonas', sub: 'Ciclo menstrual, fertilidad, balance hormonal', bg: 'rgba(69,123,157,0.1)', color: 'var(--color-info)' },
+                { icon: <Smile size={20} />, title: 'Fortalece tu Bienestar', sub: 'Salud mental, mindfulness, apoyo emocional', bg: 'rgba(231,111,81,0.1)', color: 'var(--color-accent)' },
+              ].map((p) => (
+                <motion.div key={p.title} className={styles.pillarItem} variants={slideUp}>
+                  <div className={styles.pillarIcon} style={{ backgroundColor: p.bg, color: p.color }}>
+                    {p.icon}
+                  </div>
+                  <div>
+                    <h4>{p.title}</h4>
+                    <p>{p.sub}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* How it Works */}
+      {/* ═══ HOW IT WORKS ═══════════════════════════════════════════════════ */}
       <section className={styles.howSection}>
         <div className={styles.infoContainer}>
-          <div className={styles.infoHeader}>
-            <h2>&iquest;C&oacute;mo funciona?</h2>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2>¿Cómo funciona?</h2>
             <p>En 3 simples pasos accede a tu portal personalizado de bienestar.</p>
-          </div>
+          </motion.div>
 
-          <div className={styles.stepsGrid}>
-            <div className={styles.stepCard}>
+          <motion.div
+            className={styles.stepsGrid}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>1</div>
-              <div className={styles.stepIcon}>
-                <ClipboardCheck size={32} color="var(--color-primary)" />
-              </div>
-              <h3>Eval&uacute;a tu dolor</h3>
+              <div className={styles.stepIcon}><ClipboardCheck size={32} color="var(--color-primary)" /></div>
+              <h3>Evalúa tu dolor</h3>
               <p>Completa nuestro cuestionario de 7 pasos para identificar tu fenotipo de dolor.</p>
-            </div>
-            <div className={styles.stepArrow}><ArrowRight size={24} /></div>
-            <div className={styles.stepCard}>
+            </motion.div>
+
+            <motion.div className={styles.stepArrow} variants={fadeUp}>
+              <ArrowRight size={24} />
+            </motion.div>
+
+            <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>2</div>
-              <div className={styles.stepIcon}>
-                <UserPlus size={32} color="var(--color-endo-yellow-dark)" />
-              </div>
+              <div className={styles.stepIcon}><UserPlus size={32} color="var(--color-endo-yellow-dark)" /></div>
               <h3>Crea tu cuenta</h3>
-              <p>Reg&iacute;strate para guardar tus resultados y acceder a contenido personalizado.</p>
-            </div>
-            <div className={styles.stepArrow}><ArrowRight size={24} /></div>
-            <div className={styles.stepCard}>
+              <p>Regístrate para guardar tus resultados y acceder a contenido personalizado.</p>
+            </motion.div>
+
+            <motion.div className={styles.stepArrow} variants={fadeUp}>
+              <ArrowRight size={24} />
+            </motion.div>
+
+            <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>3</div>
-              <div className={styles.stepIcon}>
-                <LayoutDashboard size={32} color="var(--color-success)" />
-              </div>
+              <div className={styles.stepIcon}><LayoutDashboard size={32} color="var(--color-success)" /></div>
               <h3>Accede a tu portal</h3>
-              <p>Recibe h&aacute;bitos, art&iacute;culos y recomendaciones basadas en tu perfil &uacute;nico.</p>
-            </div>
-          </div>
+              <p>Recibe hábitos, artículos y recomendaciones basadas en tu perfil único.</p>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ═══ CTA ════════════════════════════════════════════════════════════ */}
       <section className={styles.ctaSection}>
-        <div className={styles.ctaCard}>
+        <motion.div
+          className={styles.ctaCard}
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.65 }}
+        >
+          <div className={styles.ctaGlowTop} />
+          <div className={styles.ctaGlowBottom} />
           <div className={styles.ctaContent}>
-            <h2>Campa&ntilde;a de Revisi&oacute;n Saude</h2>
+            <h2>Campaña de Revisión Saude</h2>
             <p>
-              Durante el mes de concientizaci&oacute;n, te invitamos a dar el primer paso.
+              Durante el mes de concientización, te invitamos a dar el primer paso.
               Realiza nuestro cuestionario gratuito para recibir tu fenotipo pre-evaluado y un pase preferencial a consulta.
             </p>
-            <Link to="/questionnaire" className={styles.ctaButton}>
-              Iniciar Evaluaci&oacute;n <PlayCircle size={18} />
+            <Link to="/questionnaire" data-testid="cta-section-btn" className={styles.ctaButton}>
+              Iniciar Evaluación <PlayCircle size={18} />
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
+
     </div>
   )
 }
