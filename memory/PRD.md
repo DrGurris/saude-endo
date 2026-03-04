@@ -63,22 +63,24 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - **Pillars/Wellbeing**: Mujer meditando en bosque (Unsplash)
 
 ## Backlog / Próximas Iteraciones
-### P0 (Crítico)
-- [ ] Flujo completo register → login → ver resultados → portal
+### P0 (Completado) ✅
+- [x] Flujo completo questionnaire → register → results → portal ✅
 
-### P1 (Alta prioridad)
+### P1 (Completado - Sesión 2) ✅
 - [x] Login.tsx y Register.tsx - animaciones Framer Motion ✅
 - [x] Results.tsx: animación de barras de fenotipo al cargar ✅
 - [x] Portal.tsx: staggered cards + HabitCheckbox con SVG animado ✅
-- [ ] Reemplazar date input nativo en cuestionario paso 3 con styled picker
 
-### P2 (Backlog)
-- [ ] Añadir imágenes a Results.tsx según fenotipo dominante
-- [ ] Persistencia de hábitos completados (localStorage)
-- [ ] Dark mode
-- [ ] Accessibility: ARIA labels completos
+### P2 (Completado - Sesión 3) ✅
+- [x] DatePicker estilizado (3 selects Día/Mes/Año) en paso 3 del cuestionario y registro ✅
+- [x] Dark mode con ThemeContext + toggle Moon/Sun en navbar ✅
+- [x] Persistencia de hábitos del Portal en localStorage ✅
+
+### Pendiente
+- [ ] Accesibilidad: ARIA labels completos
 - [ ] SEO: meta tags y OG tags
-- [ ] Testimonios/social proof en Home antes del CTA
+- [ ] Sección de testimonios/social proof en Home (social proof)
+- [ ] Imágenes específicas en Results según fenotipo dominante
 
 ## Arquitectura de Contexto
 - `AuthContext`: Maneja user, isAuthenticated, questionnaireAnswers, phenotypeResult
