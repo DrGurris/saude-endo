@@ -73,19 +73,35 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 }
 
-// Animated Checkbox Component
+// Animated Checkbox Component with localStorage persistence
 const HabitCheckbox: React.FC<{
   habit: string
   color: string
   pillarId: string
   index: number
 }> = ({ habit, color, pillarId, index }) => {
-  const [checked, setChecked] = useState(false)
+  const storageKey = `saude_habit_${pillarId}_${index}`
+
+  const [checked, setChecked] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(storageKey) === 'true'
+    } catch {
+      return false
+    }
+  })
+
+  const handleToggle = () => {
+    const next = !checked
+    setChecked(next)
+    try {
+      localStorage.setItem(storageKey, String(next))
+    } catch { /* ignore */ }
+  }
 
   return (
     <motion.label
       className={`${styles.habitItem} ${checked ? styles.habitDone : ''}`}
-      onClick={() => setChecked((v) => !v)}
+      onClick={handleToggle}
       whileHover={{ x: 3 }}
       transition={{ duration: 0.15 }}
       data-testid={`habit-${pillarId}-${index}`}

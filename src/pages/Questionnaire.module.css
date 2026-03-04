@@ -11,6 +11,10 @@
   min-height: calc(100vh - 80px);
 }
 
+[data-theme="dark"] .container {
+  background: var(--color-background);
+}
+
 .card {
   background: var(--color-surface);
   border-radius: var(--radius-2xl);

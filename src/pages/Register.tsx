@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate, Navigate, Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UserPlus, Eye, EyeOff, Check, X, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { registerSchema, type RegisterFormData } from '../utils/validation'
+import DatePicker from '../components/DatePicker'
 import styles from './Register.module.css'
 
 function getPasswordStrength(password: string): { score: number; label: string; color: string } {
@@ -55,6 +56,7 @@ const Register: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -139,9 +141,19 @@ const Register: React.FC = () => {
 
           <motion.div className={styles.inputGroup} variants={fieldVariant}>
             <label htmlFor="birthDate">Fecha de nacimiento</label>
-            <input id="birthDate" type="date" data-testid="register-birthdate"
-              {...register('birthDate')} className={errors.birthDate ? styles.inputError : ''}
-              max={new Date().toISOString().split('T')[0]} />
+            <Controller
+              name="birthDate"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  id="birthDate"
+                  value={field.value}
+                  onChange={field.onChange}
+                  max={new Date().toISOString().split('T')[0]}
+                  hasError={!!errors.birthDate}
+                />
+              )}
+            />
             {errors.birthDate && <span className={styles.fieldError}>{errors.birthDate.message}</span>}
           </motion.div>
 

@@ -1,12 +1,15 @@
 import React from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import Logo from './Logo'
-import { Heart, Home, User, Info, LogOut, BarChart3 } from 'lucide-react'
+import { Heart, Home, User, Info, LogOut, BarChart3, Sun, Moon } from 'lucide-react'
+import { motion } from 'framer-motion'
 import styles from './Layout.module.css'
 
 const Layout: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth()
+  const { isDark, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -53,6 +56,26 @@ const Layout: React.FC = () => {
                 </Link>
               </>
             )}
+
+            {/* Dark mode toggle */}
+            <motion.button
+              className={styles.themeToggle}
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              data-testid="theme-toggle"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9, rotate: 15 }}
+              title={isDark ? 'Modo claro' : 'Modo oscuro'}
+            >
+              <motion.div
+                key={isDark ? 'sun' : 'moon'}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              </motion.div>
+            </motion.button>
           </nav>
         </div>
       </header>

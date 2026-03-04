@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { calculatePhenotype } from '../utils/phenotypeAlgorithm'
 import { stepSchemas } from '../utils/validation'
+import DatePicker from '../components/DatePicker'
 import type {
   DiagnosisOption,
   HormonalStatus,
@@ -265,13 +266,11 @@ const Questionnaire: React.FC = () => {
               {/* Step 3: Last Period */}
               {step === 3 && (
                 <div className={styles.inputGroup}>
-                  <label htmlFor="lastPeriod">Fecha aproximada</label>
-                  <input
+                  <label htmlFor="lastPeriod">Fecha aproximada de tu último periodo</label>
+                  <DatePicker
                     id="lastPeriod"
-                    data-testid="last-period-input"
-                    type="date"
                     value={answers.q3LastPeriod ?? ''}
-                    onChange={(e) => setAnswers({ ...answers, q3LastPeriod: e.target.value })}
+                    onChange={(val) => setAnswers({ ...answers, q3LastPeriod: val })}
                     max={new Date().toISOString().split('T')[0]}
                   />
                 </div>

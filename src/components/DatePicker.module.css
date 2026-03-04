@@ -1,0 +1,73 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
+  padding: 0 0.5rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.wrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(16, 93, 119, 0.1);
+  background: var(--color-surface);
+}
+
+.wrapperError {
+  border-color: var(--color-accent);
+}
+
+.select {
+  flex: 1;
+  padding: 0.9rem 0.5rem;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+}
+
+.selectMonth {
+  flex: 2;
+}
+
+.selectYear {
+  flex: 1.5;
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+}
+
+.sep {
+  color: var(--color-border);
+  font-size: 1.1rem;
+  font-weight: 300;
+  padding: 0 0.15rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .wrapper {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .wrapper:focus-within {
+  background: var(--color-surface-hover);
+}
+
+@media (max-width: 480px) {
+  .select {
+    padding: 0.8rem 0.3rem;
+    font-size: 0.9rem;
+  }
+}

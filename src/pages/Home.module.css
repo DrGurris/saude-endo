@@ -12,8 +12,18 @@
 .hero {
   position: relative;
   padding: 5rem 2rem 6rem;
-  background: linear-gradient(150deg, #f8fafc 0%, #e8f4f8 55%, #fef9e7 100%);
+  background: linear-gradient(150deg,
+    var(--hero-bg-from, #f8fafc) 0%,
+    var(--hero-bg-mid, #e8f4f8) 55%,
+    var(--hero-bg-warm, #fef9e7) 100%);
   overflow: hidden;
+}
+
+/* Dark mode hero */
+[data-theme="dark"] .hero {
+  --hero-bg-from: #0d1825;
+  --hero-bg-mid: #0e1d30;
+  --hero-bg-warm: #0f1e32;
 }
 
 .blobTopRight {
@@ -199,6 +209,12 @@
   gap: 0.75rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   min-width: 170px;
+}
+
+[data-theme="dark"] .floatingCard {
+  background: rgba(19, 35, 55, 0.92);
+  border-color: rgba(30, 55, 81, 0.6);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
 .floatingCardRight {
