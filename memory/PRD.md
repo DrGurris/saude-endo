@@ -77,9 +77,9 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - [x] Persistencia de hábitos del Portal en localStorage ✅
 
 ### Pendiente
-- [ ] Accesibilidad: ARIA labels completos
-- [ ] Funcionalidad de "Registrar mi día" en widget del Portal
-- [ ] Integración de calendario real para agendar cita
+- [ ] Backend real: autenticación con JWT, persistencia en MongoDB
+- [ ] Módulos completos de cada pilar (contenido de artículos)
+- [ ] Visualización del historial del diario (gráfica de 7 días)
 
 ## Arquitectura de Contexto
 - `AuthContext`: Maneja user, isAuthenticated, questionnaireAnswers, phenotypeResult
