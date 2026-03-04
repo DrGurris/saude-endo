@@ -78,9 +78,8 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 
 ### Pendiente
 - [ ] Accesibilidad: ARIA labels completos
-- [ ] SEO: meta tags y OG tags
-- [ ] Sección de testimonios/social proof en Home (social proof)
-- [ ] Imágenes específicas en Results según fenotipo dominante
+- [ ] Funcionalidad de "Registrar mi día" en widget del Portal
+- [ ] Integración de calendario real para agendar cita
 
 ## Arquitectura de Contexto
 - `AuthContext`: Maneja user, isAuthenticated, questionnaireAnswers, phenotypeResult
