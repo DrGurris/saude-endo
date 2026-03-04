@@ -67,17 +67,18 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - [ ] Flujo completo register → login → ver resultados → portal
 
 ### P1 (Alta prioridad)
-- [ ] Mejorar Register.tsx y Login.tsx con mismas animaciones
-- [ ] Results.tsx: animación de barras de fenotipo al cargar
-- [ ] Portal.tsx: animaciones de entrada para pillar cards
+- [x] Login.tsx y Register.tsx - animaciones Framer Motion ✅
+- [x] Results.tsx: animación de barras de fenotipo al cargar ✅
+- [x] Portal.tsx: staggered cards + HabitCheckbox con SVG animado ✅
 - [ ] Reemplazar date input nativo en cuestionario paso 3 con styled picker
 
 ### P2 (Backlog)
 - [ ] Añadir imágenes a Results.tsx según fenotipo dominante
-- [ ] Micro-animaciones en Portal (checkboxes de hábitos)
+- [ ] Persistencia de hábitos completados (localStorage)
 - [ ] Dark mode
 - [ ] Accessibility: ARIA labels completos
 - [ ] SEO: meta tags y OG tags
+- [ ] Testimonios/social proof en Home antes del CTA
 
 ## Arquitectura de Contexto
 - `AuthContext`: Maneja user, isAuthenticated, questionnaireAnswers, phenotypeResult
