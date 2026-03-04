@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import {
   Activity, ArrowRight, PlayCircle,
   Zap, Brain, Heart, Apple, BatteryCharging, Smile, Droplets,
-  ClipboardCheck, UserPlus, LayoutDashboard, CheckCircle,
+  ClipboardCheck, UserPlus, LayoutDashboard, CheckCircle, Star,
+  Quote,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import styles from './Home.module.css'
@@ -12,6 +13,45 @@ const HERO_IMAGE =
   'https://images.unsplash.com/photo-1767884022378-7909a74a15ab?w=700&q=85&crop=entropy&cs=srgb'
 const WELLBEING_IMAGE =
   'https://images.unsplash.com/photo-1769238507274-59e0db6c6bbe?w=600&q=80&crop=entropy&cs=srgb'
+
+const TESTIMONIALS = [
+  {
+    name: 'Valentina G.',
+    city: 'Ciudad de México',
+    age: 32,
+    initials: 'VG',
+    color: 'var(--color-primary)',
+    bg: 'rgba(16,93,119,0.12)',
+    quote: 'Por fin alguien entendió que mi dolor era real. El cuestionario me ayudó a identificar mi fenotipo, y el plan de tratamiento cambió completamente mi vida.',
+  },
+  {
+    name: 'Mariana T.',
+    city: 'Bogotá, Colombia',
+    age: 28,
+    initials: 'MT',
+    color: 'var(--color-success)',
+    bg: 'rgba(42,157,143,0.12)',
+    quote: 'Tardé 9 años en obtener un diagnóstico. Saude me dio las herramientas para hablar con mi ginecóloga con más claridad y finalmente recibir atención adecuada.',
+  },
+  {
+    name: 'Carolina R.',
+    city: 'Buenos Aires, Argentina',
+    age: 35,
+    initials: 'CR',
+    color: 'var(--color-secondary)',
+    bg: 'rgba(244,162,97,0.12)',
+    quote: 'La sección de alimentación antiinflamatoria fue un cambio de vida para mi endo belly. Finalmente entiendo qué comer y por qué me siento así.',
+  },
+  {
+    name: 'Sofía M.',
+    city: 'Santiago, Chile',
+    age: 24,
+    initials: 'SM',
+    color: 'var(--color-accent)',
+    bg: 'rgba(231,111,81,0.12)',
+    quote: 'Pensé que era normal sentir tanto dolor. Gracias al cuestionario entendí que tenía sensibilización central y pude buscar el especialista adecuado.',
+  },
+]
 
 // ─── Animation Variants ────────────────────────────────────────────────────
 const staggerContainer = {
@@ -362,6 +402,59 @@ const Home: React.FC = () => {
               <h3>Accede a tu portal</h3>
               <p>Recibe hábitos, artículos y recomendaciones basadas en tu perfil único.</p>
             </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ TESTIMONIOS ════════════════════════════════════════════════ */}
+      <section className={styles.testimoniosSection}>
+        <div className={styles.infoContainer}>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2>Lo que dicen nuestras pacientes</h2>
+            <p>Mujeres que encontraron respuestas y tomaron el control de su salud.</p>
+          </motion.div>
+
+          <motion.div
+            className={styles.testimoniosGrid}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            {TESTIMONIALS.map((t) => (
+              <motion.div
+                key={t.name}
+                className={styles.testimonialCard}
+                variants={slideUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              >
+                <Quote size={28} className={styles.quoteIcon} color={t.color} />
+                <p className={styles.testimonialQuote}>{t.quote}</p>
+                <div className={styles.testimonialStars}>
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} fill={t.color} color={t.color} />
+                  ))}
+                </div>
+                <div className={styles.testimonialAuthor}>
+                  <div
+                    className={styles.testimonialAvatar}
+                    style={{ backgroundColor: t.bg, color: t.color }}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className={styles.testimonialName}>{t.name}</p>
+                    <p className={styles.testimonialMeta}>{t.age} años · {t.city}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>

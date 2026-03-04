@@ -1,10 +1,43 @@
 import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { CalendarCheck, Info, ChevronRight, Award } from 'lucide-react'
+import { CalendarCheck, Info, ChevronRight, Award, Flame, Zap, Brain, Layers } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { PHENOTYPE_LABELS, PHENOTYPE_DESCRIPTIONS } from '../types'
+import type { PhenotypeType } from '../types'
 import styles from './Results.module.css'
+
+const PHENOTYPE_VISUALS: Record<PhenotypeType, {
+  image: string
+  icon: React.ReactNode
+  tags: string[]
+  profile: string
+}> = {
+  nociceptive: {
+    image: 'https://images.unsplash.com/photo-1552650272-b8a34e21bc4b?w=420&q=80&crop=entropy&cs=srgb',
+    icon: <Flame size={22} />,
+    tags: ['Inflamatorio', 'Cíclico', 'Hormonal'],
+    profile: 'Tu dolor responde principalmente a la inflamación y variaciones hormonales del ciclo menstrual.',
+  },
+  neuropathic: {
+    image: 'https://images.unsplash.com/photo-1769238507274-59e0db6c6bbe?w=420&q=80&crop=entropy&cs=srgb',
+    icon: <Zap size={22} />,
+    tags: ['Nervioso', 'Irradiado', 'Eléctrico'],
+    profile: 'Los nervios pélvicos están sensibilizados. El tratamiento se enfoca en neuromodulación.',
+  },
+  nociplastic: {
+    image: 'https://images.unsplash.com/photo-1600721391711-58a817124605?w=420&q=80&crop=entropy&cs=srgb',
+    icon: <Brain size={22} />,
+    tags: ['Sensibilización central', 'Sistémico', 'Difuso'],
+    profile: 'El sistema nervioso central amplifica el dolor. El abordaje es multidisciplinario mente-cuerpo.',
+  },
+  mixed: {
+    image: 'https://images.unsplash.com/photo-1767884022378-7909a74a15ab?w=420&q=80&crop=entropy&cs=srgb',
+    icon: <Layers size={22} />,
+    tags: ['Inflamatorio', 'Neuropático', 'Complejo'],
+    profile: 'Presentas múltiples componentes. Tu plan requiere un enfoque escalonado y personalizado.',
+  },
+}
 
 const stagger = {
   hidden: {},
@@ -60,6 +93,7 @@ const Results: React.FC = () => {
 
   const details = PHENOTYPE_DESCRIPTIONS[phenotypeResult.dominantPhenotype]
   const label = PHENOTYPE_LABELS[phenotypeResult.dominantPhenotype]
+  const visual = PHENOTYPE_VISUALS[phenotypeResult.dominantPhenotype]
 
   return (
     <div className={styles.container}>
@@ -85,24 +119,60 @@ const Results: React.FC = () => {
           style={{ borderTop: `4px solid ${details.color}` }}
           variants={scaleIn}
         >
-          <div className={styles.badge}>Resultado de Evaluación</div>
-          <motion.h2
-            className={styles.dominantText}
-            style={{ color: details.color }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            Perfil de Dolor {label}
-          </motion.h2>
-          <motion.p
-            className={styles.description}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
-            {details.description}
-          </motion.p>
+          {/* Phenotype Visual Row */}
+          <div className={styles.phenotypeVisualRow}>
+            <div className={styles.phenotypeTextSide}>
+              <div className={styles.badge}>Resultado de Evaluación</div>
+              <motion.h2
+                className={styles.dominantText}
+                style={{ color: details.color }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+              >
+                Perfil de Dolor {label}
+              </motion.h2>
+
+              {/* Tags */}
+              <motion.div
+                className={styles.phenotypeTags}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <span className={styles.phenotypeIconBadge} style={{ background: `${details.color}18`, color: details.color }}>
+                  {visual.icon}
+                </span>
+                {visual.tags.map((tag) => (
+                  <span key={tag} className={styles.tag} style={{ borderColor: `${details.color}40`, color: details.color }}>
+                    {tag}
+                  </span>
+                ))}
+              </motion.div>
+
+              <motion.p
+                className={styles.description}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+              >
+                {details.description}
+              </motion.p>
+            </div>
+
+            {/* Phenotype Image */}
+            <motion.div
+              className={styles.phenotypeImageWrap}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.35, duration: 0.7, ease: 'easeOut' }}
+            >
+              <img src={visual.image} alt={`Fenotipo ${label}`} className={styles.phenotypeImg} />
+              <div className={styles.phenotypeImgOverlay} style={{ background: `linear-gradient(to top, ${details.color}cc, transparent)` }}>
+                <p>{visual.profile}</p>
+              </div>
+            </motion.div>
+          </div>
 
           {/* Animated Chart */}
           <motion.div
