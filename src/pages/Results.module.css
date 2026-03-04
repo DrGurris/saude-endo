@@ -1,0 +1,219 @@
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 80px);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-dark);
+}
+
+.subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+}
+
+.resultCard {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    padding: 3rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--color-surface-hover);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.dominantText {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+    max-width: 600px;
+}
+
+/* Charts */
+.chartContainer {
+    background: var(--color-surface-hover);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+}
+
+.chartBar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.chartOption {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chartOption>span:first-child {
+    width: 200px;
+    font-weight: 500;
+    text-align: right;
+}
+
+.chartOption>span:last-child {
+    width: 50px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.barWrap {
+    flex: 1;
+    height: 12px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.barFill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Actions Section */
+.actionSection {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+}
+
+.nextSteps {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+}
+
+.nextSteps h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.infoBox {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-surface-hover);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+}
+
+.infoIcon {
+    flex-shrink: 0;
+}
+
+.campaignText {
+    padding: 1rem;
+    border-left: 4px solid var(--color-endo-yellow);
+    background: rgba(255, 193, 7, 0.05);
+    font-size: 0.95rem;
+}
+
+.ctaCard {
+    background: var(--color-primary-dark);
+    color: white;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.ctaCard h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ctaCard p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+}
+
+.bookingBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--color-endo-yellow);
+    color: var(--color-primary-dark);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    transition: all var(--transition-fast);
+}
+
+.bookingBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.portalLink {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: white;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.portalLink:hover {
+    opacity: 1;
+    color: var(--color-endo-yellow);
+}
+
+@media (max-width: 900px) {
+    .actionSection {
+        grid-template-columns: 1fr;
+    }
+
+    .chartOption {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .chartOption>span:first-child {
+        width: auto;
+        text-align: left;
+    }
+}
