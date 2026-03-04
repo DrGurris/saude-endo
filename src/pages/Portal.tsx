@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { GOAL_PILLAR_MAP } from '../types'
 import type { PillarId } from '../types'
+import DiarioModal from '../components/DiarioModal'
+import BookingModal from '../components/BookingModal'
 import styles from './Portal.module.css'
 
 interface PillarData {
@@ -145,6 +147,8 @@ const HabitCheckbox: React.FC<{
 
 const Portal: React.FC = () => {
   const { user, phenotypeResult } = useAuth()
+  const [showDiario, setShowDiario] = useState(false)
+  const [showBooking, setShowBooking] = useState(false)
 
   const sortedPillars = useMemo(() => {
     if (!phenotypeResult?.goal) return ALL_PILLARS
@@ -161,6 +165,8 @@ const Portal: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <DiarioModal isOpen={showDiario} onClose={() => setShowDiario(false)} />
+      <BookingModal isOpen={showBooking} onClose={() => setShowBooking(false)} />
       <motion.div
         style={{ width: '100%', maxWidth: '1200px' }}
         variants={stagger}
@@ -276,7 +282,9 @@ const Portal: React.FC = () => {
               className={styles.widgetBtn}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              onClick={() => setShowBooking(true)}
               data-testid="widget-agendar"
+              aria-label="Agendar revisión médica"
             >
               Agendar Revisión
             </motion.button>
@@ -296,7 +304,9 @@ const Portal: React.FC = () => {
               className={styles.widgetBtnOutline}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
+              onClick={() => setShowDiario(true)}
               data-testid="widget-diario"
+              aria-label="Abrir diario de síntomas"
             >
               Registrar mi día
             </motion.button>

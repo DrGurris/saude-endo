@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { CalendarCheck, Info, ChevronRight, Award, Flame, Zap, Brain, Layers } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { PHENOTYPE_LABELS, PHENOTYPE_DESCRIPTIONS } from '../types'
 import type { PhenotypeType } from '../types'
+import BookingModal from '../components/BookingModal'
 import styles from './Results.module.css'
 
 const PHENOTYPE_VISUALS: Record<PhenotypeType, {
@@ -86,6 +87,7 @@ const AnimatedBar: React.FC<BarProps> = ({ label, value, color, delay }) => (
 
 const Results: React.FC = () => {
   const { user, phenotypeResult } = useAuth()
+  const [showBooking, setShowBooking] = useState(false)
 
   if (!phenotypeResult) {
     return <Navigate to="/questionnaire" replace />
@@ -97,6 +99,7 @@ const Results: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <BookingModal isOpen={showBooking} onClose={() => setShowBooking(false)} />
       <motion.div
         style={{ width: '100%', maxWidth: '900px' }}
         variants={stagger}
@@ -228,7 +231,9 @@ const Results: React.FC = () => {
               className={styles.bookingBtn}
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
+              onClick={() => setShowBooking(true)}
               data-testid="booking-btn"
+              aria-label="Solicitar cita médica"
             >
               <CalendarCheck size={20} /> Solicitar Cita
             </motion.button>

@@ -24,7 +24,7 @@ const Layout: React.FC = () => {
           <Link to="/" className={styles.logoLink}>
             <Logo className={styles.logo} />
           </Link>
-          <nav className={styles.nav}>
+          <nav className={styles.nav} role="navigation" aria-label="Menú principal">
             {isAuthenticated ? (
               <>
                 <Link to="/" className={styles.navLink}>
@@ -62,6 +62,7 @@ const Layout: React.FC = () => {
               className={styles.themeToggle}
               onClick={toggleTheme}
               aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              aria-pressed={isDark}
               data-testid="theme-toggle"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9, rotate: 15 }}
@@ -80,7 +81,7 @@ const Layout: React.FC = () => {
         </div>
       </header>
 
-      <main className={styles.main}>
+      <main className={styles.main} id="main-content" role="main">
         <Outlet />
       </main>
 

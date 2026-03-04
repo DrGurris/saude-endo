@@ -138,7 +138,7 @@ const Home: React.FC = () => {
           >
             <motion.img
               src={HERO_IMAGE}
-              alt="Mujer en bienestar y esperanza"
+              alt="Mujer mirando al horizonte con esperanza y bienestar"
               className={styles.heroImg}
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }}
@@ -316,7 +316,7 @@ const Home: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.75, ease: 'easeOut' }}
             >
-              <img src={WELLBEING_IMAGE} alt="Mujer meditando en bienestar" className={styles.pillarsImg} />
+              <img src={WELLBEING_IMAGE} alt="Mujer meditando en bosque, representando bienestar integral" className={styles.pillarsImg} />
               <div className={styles.pillarsImgOverlay}>
                 <h3>Tu bienestar integral</h3>
                 <p>Un plan personalizado basado en tu fenotipo de dolor</p>
