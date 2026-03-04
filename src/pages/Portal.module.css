@@ -151,16 +151,32 @@
 }
 
 .habitItem {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  border-radius: var(--radius-md);
+  transition: opacity 0.2s ease;
+  user-select: none;
 }
 
-.checkbox {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+.habitDone .habitText {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+.habitCheckbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
 }
 
 .habitText {
@@ -199,12 +215,33 @@
 }
 
 .widget {
-    background: var(--color-surface);
-    border-radius: var(--radius-xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  transition: all 0.25s ease;
+}
+
+.widgetIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background: rgba(16, 93, 119, 0.08);
+}
+
+.widgetPrimary .widgetIcon {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.widgetYellow .widgetIcon {
+  background: rgba(10, 66, 85, 0.08);
 }
 
 .widgetPrimary {
