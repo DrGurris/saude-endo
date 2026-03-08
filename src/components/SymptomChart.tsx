@@ -1,8 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { TrendingDown, TrendingUp, Minus } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useAuth } from '../context/AuthContext'
 import styles from './SymptomChart.module.css'
+
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 interface DayEntry {
   date: string
@@ -88,7 +91,51 @@ const CustomTooltip: React.FC<{ active?: boolean; payload?: { value: number; nam
 }
 
 const SymptomChart: React.FC = () => {
-  const entries = useMemo(() => getLast7Entries(), [])
+  const { isAuthenticated } = useAuth()
+  const [backendEntries, setBackendEntries] = useState<DayEntry[]>([])
+  
+  // Fetch entries from backend if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = localStorage.getItem('saude_token')
+      if (token) {
+        fetch(`${API_URL}/symptoms?days=7`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.symptoms) {
+              setBackendEntries(data.symptoms.map((s: { date: string; pain: number; energy: number; mood: 'good' | 'neutral' | 'bad'; notes: string }) => ({
+                date: s.date,
+                pain: s.pain,
+                energy: s.energy,
+                mood: s.mood,
+                notes: s.notes
+              })))
+            }
+          })
+          .catch(console.error)
+      }
+    }
+  }, [isAuthenticated])
+
+  // Combine localStorage entries with backend entries (backend takes priority)
+  const entries = useMemo(() => {
+    const localEntries = getLast7Entries()
+    
+    if (backendEntries.length > 0) {
+      // Merge: backend entries take priority
+      const entriesMap = new Map<string, DayEntry>()
+      localEntries.forEach(e => entriesMap.set(e.date, e))
+      backendEntries.forEach(e => entriesMap.set(e.date, e))
+      return Array.from(entriesMap.values()).sort((a, b) => a.date.localeCompare(b.date))
+    }
+    
+    return localEntries
+  }, [backendEntries])
 
   const chartData = useMemo(() => {
     return entries.map((entry) => ({

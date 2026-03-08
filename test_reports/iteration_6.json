@@ -1,0 +1,75 @@
+{
+  "summary": "Full test suite for Saude platform created - Backend API tests (30 passed) and Frontend E2E tests (17 passed). All authentication, symptoms, questionnaire APIs and frontend flows working correctly.",
+  "mode": "generate",
+  "baseline_commit": "e03727e429fb47d0e3c1e79c77a8b19f77c7436a",
+  "head_commit": "e03727e429fb47d0e3c1e79c77a8b19f77c7436a",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "External Preview",
+        "issue": "External preview URL shows 'Preview Unavailable'. All tests run against localhost which works correctly.",
+        "affected_selectors": []
+      }
+    ],
+    "design_issues": []
+  },
+  "regression_results": {
+    "total_specs": 47,
+    "passed": 47,
+    "failed": 0,
+    "skipped": 0
+  },
+  "specs_created": [
+    "/app/backend/tests/conftest.py",
+    "/app/backend/tests/test_auth.py",
+    "/app/backend/tests/test_symptoms.py",
+    "/app/backend/tests/test_questionnaire.py",
+    "/app/tests/e2e/core-flows.spec.ts",
+    "/app/tests/e2e/auth-flows.spec.ts",
+    "/app/tests/e2e/questionnaire-flow.spec.ts"
+  ],
+  "specs_updated": [],
+  "quarantined_tests": [],
+  "test_report_links": [
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "External preview URL is unavailable - may need to check Emergent preview service"
+  ],
+  "updated_files": [
+    "/app/tests/playwright.config.ts",
+    "/app/tests/fixtures/helpers.ts"
+  ],
+  "success_rate": {
+    "backend": "100% (30/30 tests passed)",
+    "frontend": "100% (17/17 tests passed)"
+  },
+  "seed_data_creation": "Test users created during pytest runs are prefixed with TEST_ for identification",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All tests passed. Backend tests in /app/backend/tests/ (pytest), Frontend E2E in /app/tests/e2e/ (Playwright). External preview unavailable - use localhost:3000 for frontend and localhost:8001 for backend. Questionnaire flow: 7 steps -> register -> results -> portal. Auth flow requires completing questionnaire first to access register page.",
+  "test_coverage": {
+    "backend_api": {
+      "health_check": "GET /api/health - verified healthy status",
+      "auth_register": "POST /api/auth/register - new user, duplicate email, validation",
+      "auth_login": "POST /api/auth/login - valid creds, invalid creds, nonexistent email",
+      "auth_me": "GET /api/auth/me - authenticated, unauthenticated, invalid token",
+      "symptoms_create": "POST /api/symptoms - create, update existing, auth required, validation",
+      "symptoms_get": "GET /api/symptoms - list, with days param, by date, auth required",
+      "symptoms_delete": "DELETE /api/symptoms/{date} - success, not found",
+      "questionnaire_save": "POST /api/questionnaire - save answers and phenotype",
+      "questionnaire_results": "GET /api/questionnaire/results - get latest",
+      "questionnaire_history": "GET /api/questionnaire/history - get all"
+    },
+    "frontend_e2e": {
+      "homepage": "Hero section, CTA buttons, navigation, theme toggle",
+      "auth_pages": "Login page, protected routes redirect, register requires phenotype",
+      "questionnaire": "7-step flow, selection validation, navigation, complete flow to registration"
+    }
+  }
+}

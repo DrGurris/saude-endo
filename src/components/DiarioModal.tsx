@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { X, Smile, Meh, Frown, CheckCircle2, CalendarDays, Zap, Heart } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../context/AuthContext'
 import styles from './DiarioModal.module.css'
+
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 interface DayEntry {
   date: string
@@ -61,11 +64,45 @@ interface DiarioModalProps {
 }
 
 const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
+  const { isAuthenticated } = useAuth()
   const [entry, setEntry] = useState<DayEntry>(() => loadEntry(today))
   const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
 
-  const handleSave = () => {
-    try { localStorage.setItem(getStorageKey(today), JSON.stringify(entry)) } catch { /* ignore */ }
+  const handleSave = async () => {
+    setSaving(true)
+    
+    // Always save to localStorage for offline access
+    try { 
+      localStorage.setItem(getStorageKey(today), JSON.stringify(entry)) 
+    } catch { /* ignore */ }
+    
+    // If authenticated, also save to backend
+    if (isAuthenticated) {
+      const token = localStorage.getItem('saude_token')
+      if (token) {
+        try {
+          await fetch(`${API_URL}/symptoms`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              date: entry.date,
+              pain: entry.pain,
+              energy: entry.energy,
+              mood: entry.mood,
+              notes: entry.notes
+            })
+          })
+        } catch (e) {
+          console.error('Error saving to backend:', e)
+        }
+      }
+    }
+    
+    setSaving(false)
     setSaved(true)
     setTimeout(() => { setSaved(false); onClose() }, 1600)
   }
@@ -224,9 +261,10 @@ const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
                     whileTap={{ scale: 0.97 }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
+                    disabled={saving}
                     data-testid="diario-save"
                   >
-                    Guardar registro del día
+                    {saving ? 'Guardando...' : 'Guardar registro del día'}
                   </motion.button>
                 )}
               </AnimatePresence>
