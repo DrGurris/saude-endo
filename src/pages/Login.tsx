@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LogIn, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../components/Toast'
 import { loginSchema, type LoginFormData } from '../utils/validation'
 import styles from './Login.module.css'
 
@@ -26,6 +27,7 @@ const fieldVariant = {
 const Login: React.FC = () => {
   const navigate = useNavigate()
   const { login, isAuthenticated, isLoading } = useAuth()
+  const toast = useToast()
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState('')
 
@@ -58,9 +60,12 @@ const Login: React.FC = () => {
     try {
       setServerError('')
       await login(data.email, data.password)
+      toast.success('¡Bienvenida de vuelta!', 'Has iniciado sesión correctamente')
       navigate('/portal')
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Error al iniciar sesión')
+      const message = err instanceof Error ? err.message : 'Error al iniciar sesión'
+      setServerError(message)
+      toast.error('Error de acceso', message)
     }
   }
 

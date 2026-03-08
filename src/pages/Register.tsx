@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UserPlus, Eye, EyeOff, Check, X, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../components/Toast'
 import { registerSchema, type RegisterFormData } from '../utils/validation'
 import DatePicker from '../components/DatePicker'
 import styles from './Register.module.css'
@@ -48,6 +49,7 @@ const fieldVariant = {
 const Register: React.FC = () => {
   const navigate = useNavigate()
   const { phenotypeResult, register: authRegister, isAuthenticated, isLoading } = useAuth()
+  const toast = useToast()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -85,9 +87,12 @@ const Register: React.FC = () => {
     try {
       setServerError('')
       await authRegister({ name: data.name, email: data.email, password: data.password, birthDate: data.birthDate })
+      toast.success('¡Cuenta creada!', 'Tu cuenta ha sido creada exitosamente')
       navigate('/results')
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Error al crear la cuenta')
+      const message = err instanceof Error ? err.message : 'Error al crear la cuenta'
+      setServerError(message)
+      toast.error('Error de registro', message)
     }
   }
 

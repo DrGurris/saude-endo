@@ -7,6 +7,8 @@ import type { PillarId } from '../types'
 import DiarioModal from '../components/DiarioModal'
 import BookingModal from '../components/BookingModal'
 import SymptomChart from '../components/SymptomChart'
+import Gamification, { BadgesModal } from '../components/Gamification'
+import { useToast } from '../components/Toast'
 import styles from './Portal.module.css'
 
 interface PillarData {
@@ -147,16 +149,23 @@ const HabitCheckbox: React.FC<{
 }
 
 const Portal: React.FC = () => {
-  const { user, phenotypeResult } = useAuth()
+  const { user, phenotypeResult, isSyncing } = useAuth()
+  const toast = useToast()
   const [showDiario, setShowDiario] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
+  const [showBadges, setShowBadges] = useState(false)
   const [chartKey, setChartKey] = useState(0)
+  const [gamificationKey, setGamificationKey] = useState(0)
 
-  const handleDiarioClose = useCallback(() => {
+  const handleDiarioClose = useCallback((saved?: boolean) => {
     setShowDiario(false)
-    // Trigger chart refresh when diary is closed (data may have been saved)
-    setChartKey(prev => prev + 1)
-  }, [])
+    if (saved) {
+      // Trigger chart and gamification refresh when diary is saved
+      setChartKey(prev => prev + 1)
+      setGamificationKey(prev => prev + 1)
+      toast.success('Registro guardado', 'Tu diario ha sido actualizado')
+    }
+  }, [toast])
 
   const sortedPillars = useMemo(() => {
     if (!phenotypeResult?.goal) return ALL_PILLARS
@@ -175,6 +184,7 @@ const Portal: React.FC = () => {
     <div className={styles.container}>
       <DiarioModal isOpen={showDiario} onClose={handleDiarioClose} />
       <BookingModal isOpen={showBooking} onClose={() => setShowBooking(false)} />
+      <BadgesModal isOpen={showBadges} onClose={() => setShowBadges(false)} />
       <motion.div
         style={{ width: '100%', maxWidth: '1200px' }}
         variants={stagger}
@@ -215,6 +225,23 @@ const Portal: React.FC = () => {
             </div>
           </motion.div>
         </motion.header>
+
+        {/* Sync Indicator */}
+        {isSyncing && (
+          <motion.div 
+            className={styles.syncBanner}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            data-testid="sync-indicator"
+          >
+            <div className={styles.syncSpinner} />
+            <span>Sincronizando tus datos...</span>
+          </motion.div>
+        )}
+
+        {/* Gamification - Streak Card */}
+        <Gamification key={gamificationKey} onShowBadges={() => setShowBadges(true)} />
 
         {/* Symptom Progress Chart */}
         <SymptomChart key={chartKey} />

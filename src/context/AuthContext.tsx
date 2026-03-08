@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null
   isAuthenticated: boolean
   isLoading: boolean
+  isSyncing: boolean
   questionnaireAnswers: QuestionnaireAnswers | null
   phenotypeResult: PhenotypeResult | null
   saveQuestionnaireAnswers: (answers: QuestionnaireAnswers) => void
@@ -97,6 +98,7 @@ async function syncSymptomsToBackend(token: string): Promise<void> {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSyncing, setIsSyncing] = useState(false)
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<QuestionnaireAnswers | null>(
     () => loadSessionData<QuestionnaireAnswers>(SESSION_ANSWERS_KEY)
   )
@@ -254,7 +256,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Sync localStorage symptoms to backend in background
-    syncSymptomsToBackend(token).catch(console.error)
+    setIsSyncing(true)
+    syncSymptomsToBackend(token)
+      .catch(console.error)
+      .finally(() => setIsSyncing(false))
   }, [])
 
   const logout = useCallback(() => {
@@ -270,6 +275,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     isAuthenticated,
     isLoading,
+    isSyncing,
     questionnaireAnswers,
     phenotypeResult,
     saveQuestionnaireAnswers,
@@ -277,7 +283,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     register,
     login,
     logout,
-  }), [user, isAuthenticated, isLoading, questionnaireAnswers, phenotypeResult,
+  }), [user, isAuthenticated, isLoading, isSyncing, questionnaireAnswers, phenotypeResult,
     saveQuestionnaireAnswers, savePhenotypeResult, register, login, logout])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

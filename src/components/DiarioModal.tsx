@@ -60,7 +60,7 @@ const dateLabel = new Date().toLocaleDateString('es-ES', { weekday: 'long', day:
 
 interface DiarioModalProps {
   isOpen: boolean
-  onClose: () => void
+  onClose: (saved?: boolean) => void
 }
 
 const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
@@ -104,7 +104,7 @@ const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
     
     setSaving(false)
     setSaved(true)
-    setTimeout(() => { setSaved(false); onClose() }, 1600)
+    setTimeout(() => { setSaved(false); onClose(true) }, 1600)
   }
 
   const history = getLast7Entries().filter(e => e.date !== today).slice(-3)
