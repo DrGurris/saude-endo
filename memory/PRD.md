@@ -123,6 +123,28 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - **Sincronización de síntomas**: Al hacer login, los síntomas guardados en localStorage se sincronizan automáticamente al backend
 - **Redirección automática**: Usuarios autenticados son redirigidos automáticamente al portal
 
+### Sesión 4 - P1/P2: Toasts + Gamificación (2026-03-08)
+- **Sistema de Toast Notifications** (`Toast.tsx`):
+  - Notificaciones de éxito, error, warning e info
+  - Animaciones con Framer Motion
+  - Auto-dismiss configurable
+  - Integrado en login, register y diario de síntomas
+
+- **Indicador de Sincronización**:
+  - Banner visual cuando los síntomas se sincronizan al backend
+  - Estado `isSyncing` en AuthContext
+  - Aparece en el Portal durante la sincronización
+
+- **Sistema de Gamificación** (`Gamification.tsx`):
+  - **StreakCard**: Muestra racha actual, días registrados, hábitos completados
+  - **BadgesModal**: 6 insignias con progreso:
+    - Primer Paso (1 día)
+    - Guerrera de la Semana (7 días racha)
+    - Maestra del Mes (30 días racha)
+    - Constructora de Hábitos (10 hábitos)
+    - Campeona de Hábitos (50 hábitos)
+    - Consistente (14 días total)
+
 ## Testing
 
 ### Backend Tests (30 passed)
@@ -130,30 +152,33 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - `/app/backend/tests/test_symptoms.py`
 - `/app/backend/tests/test_questionnaire.py`
 
-### Frontend E2E Tests (24 passed)
-- `/app/tests/e2e/core-flows.spec.ts`
-- `/app/tests/e2e/auth-flows.spec.ts`
-- `/app/tests/e2e/questionnaire-flow.spec.ts`
-- `/app/tests/e2e/symptoms-sync.spec.ts`
+### Frontend E2E Tests (34 passed)
+- `/app/tests/e2e/core-flows.spec.ts` (5 tests)
+- `/app/tests/e2e/auth-flows.spec.ts` (10 tests)
+- `/app/tests/e2e/questionnaire-flow.spec.ts` (6 tests)
+- `/app/tests/e2e/symptoms-sync.spec.ts` (3 tests)
+- `/app/tests/e2e/toast-gamification.spec.ts` (10 tests)
 
-**Total: 54 tests - 100% passed**
+**Total: 64 tests - 100% passed**
 
 ## Backlog / Próximas Iteraciones
 
 ### Completado ✅
 - [x] Login/Register con estado de carga
 - [x] Sincronización de síntomas localStorage → backend
+- [x] Toast notifications para errores y confirmaciones
+- [x] Indicador visual de sincronización en progreso
+- [x] Gamificación con badges y streaks
 
-### Pendiente (P1)
-- [ ] Mejorar manejo de errores en formularios con toast notifications
-- [ ] Indicador visual de sincronización en progreso
-
-### Futuras (P2)
-- [ ] Gamificación: insignias y rachas por completar hábitos
+### Pendiente (P2 - Contenido)
 - [ ] Contenido educativo sobre endometriosis
+- [ ] Sección de artículos y recursos
+
+### Futuras (P3+)
 - [ ] Comunidad / Foro para usuarias
 - [ ] Integración con telemedicina real
 - [ ] Notificaciones push para recordar diario de síntomas
+- [ ] Dashboard de administración
 
 ## Arquitectura de Contexto React
 - `AuthContext`: user, isAuthenticated, isLoading, questionnaireAnswers, phenotypeResult
