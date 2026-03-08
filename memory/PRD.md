@@ -118,6 +118,11 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
   - DiarioModal guarda en localStorage + backend
   - SymptomChart obtiene datos de backend si autenticado
 
+### Sesión 3 - Mejoras Login/Register + Sync (2026-03-08)
+- **Estado de carga (isLoading)**: Login y Register muestran spinner mientras verifican sesión
+- **Sincronización de síntomas**: Al hacer login, los síntomas guardados en localStorage se sincronizan automáticamente al backend
+- **Redirección automática**: Usuarios autenticados son redirigidos automáticamente al portal
+
 ## Testing
 
 ### Backend Tests (30 passed)
@@ -125,23 +130,30 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - `/app/backend/tests/test_symptoms.py`
 - `/app/backend/tests/test_questionnaire.py`
 
-### Frontend E2E Tests (17 passed)
+### Frontend E2E Tests (24 passed)
 - `/app/tests/e2e/core-flows.spec.ts`
 - `/app/tests/e2e/auth-flows.spec.ts`
 - `/app/tests/e2e/questionnaire-flow.spec.ts`
+- `/app/tests/e2e/symptoms-sync.spec.ts`
+
+**Total: 54 tests - 100% passed**
 
 ## Backlog / Próximas Iteraciones
 
+### Completado ✅
+- [x] Login/Register con estado de carga
+- [x] Sincronización de síntomas localStorage → backend
+
 ### Pendiente (P1)
-- [ ] Conectar Login/Register pages con el nuevo API
-- [ ] Sincronizar localStorage symptoms existentes al hacer login
-- [ ] Mejorar manejo de errores en formularios
+- [ ] Mejorar manejo de errores en formularios con toast notifications
+- [ ] Indicador visual de sincronización en progreso
 
 ### Futuras (P2)
 - [ ] Gamificación: insignias y rachas por completar hábitos
 - [ ] Contenido educativo sobre endometriosis
 - [ ] Comunidad / Foro para usuarias
 - [ ] Integración con telemedicina real
+- [ ] Notificaciones push para recordar diario de síntomas
 
 ## Arquitectura de Contexto React
 - `AuthContext`: user, isAuthenticated, isLoading, questionnaireAnswers, phenotypeResult
