@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import { Activity, BatteryCharging, Apple, Droplets, Smile, ChevronRight, Share2, CalendarDays, BookOpen } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -6,6 +6,7 @@ import { GOAL_PILLAR_MAP } from '../types'
 import type { PillarId } from '../types'
 import DiarioModal from '../components/DiarioModal'
 import BookingModal from '../components/BookingModal'
+import SymptomChart from '../components/SymptomChart'
 import styles from './Portal.module.css'
 
 interface PillarData {
@@ -149,6 +150,13 @@ const Portal: React.FC = () => {
   const { user, phenotypeResult } = useAuth()
   const [showDiario, setShowDiario] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
+  const [chartKey, setChartKey] = useState(0)
+
+  const handleDiarioClose = useCallback(() => {
+    setShowDiario(false)
+    // Trigger chart refresh when diary is closed (data may have been saved)
+    setChartKey(prev => prev + 1)
+  }, [])
 
   const sortedPillars = useMemo(() => {
     if (!phenotypeResult?.goal) return ALL_PILLARS
@@ -165,7 +173,7 @@ const Portal: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <DiarioModal isOpen={showDiario} onClose={() => setShowDiario(false)} />
+      <DiarioModal isOpen={showDiario} onClose={handleDiarioClose} />
       <BookingModal isOpen={showBooking} onClose={() => setShowBooking(false)} />
       <motion.div
         style={{ width: '100%', maxWidth: '1200px' }}
@@ -207,6 +215,9 @@ const Portal: React.FC = () => {
             </div>
           </motion.div>
         </motion.header>
+
+        {/* Symptom Progress Chart */}
+        <SymptomChart key={chartKey} />
 
         {/* Pillar Cards */}
         <motion.div
