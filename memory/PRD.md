@@ -145,6 +145,27 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
     - Campeona de Hábitos (50 hábitos)
     - Consistente (14 días total)
 
+### Sesión 5 - P2: Biblioteca de Conocimiento (2026-03-08)
+- **Nueva página `/library`** (`Library.tsx`):
+  - 8 artículos educativos sobre endometriosis
+  - 4 categorías: Nutrición, Ejercicio, Bienestar Emocional, Información Médica
+  - Sección de artículos destacados
+  - Búsqueda por título, extracto y tags
+  - Filtros por categoría
+  - Modal para leer artículos completos
+  - Sistema de favoritos guardados en localStorage
+  - Sección preview en Home page con CTA
+
+- **Artículos incluidos**:
+  - ¿Qué es la Endometriosis?
+  - Dieta Antiinflamatoria
+  - Ejercicios Suaves para Días de Dolor
+  - Manejo del Estrés y la Ansiedad
+  - Entendiendo los Fenotipos de Dolor
+  - Suplementos que Pueden Ayudar
+  - Mejora tu Calidad de Sueño
+  - Endometriosis y Fertilidad
+
 ## Testing
 
 ### Backend Tests (30 passed)
@@ -152,14 +173,15 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - `/app/backend/tests/test_symptoms.py`
 - `/app/backend/tests/test_questionnaire.py`
 
-### Frontend E2E Tests (34 passed)
+### Frontend E2E Tests (44 passed)
 - `/app/tests/e2e/core-flows.spec.ts` (5 tests)
 - `/app/tests/e2e/auth-flows.spec.ts` (10 tests)
 - `/app/tests/e2e/questionnaire-flow.spec.ts` (6 tests)
 - `/app/tests/e2e/symptoms-sync.spec.ts` (3 tests)
 - `/app/tests/e2e/toast-gamification.spec.ts` (10 tests)
+- `/app/tests/e2e/library.spec.ts` (10 tests - NEW)
 
-**Total: 64 tests - 100% passed**
+**Total: 74 tests - 98.6% passed (1 flaky test pre-existente)**
 
 ## Backlog / Próximas Iteraciones
 
@@ -169,16 +191,15 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 - [x] Toast notifications para errores y confirmaciones
 - [x] Indicador visual de sincronización en progreso
 - [x] Gamificación con badges y streaks
-
-### Pendiente (P2 - Contenido)
-- [ ] Contenido educativo sobre endometriosis
-- [ ] Sección de artículos y recursos
+- [x] Biblioteca de Conocimiento con artículos educativos
 
 ### Futuras (P3+)
 - [ ] Comunidad / Foro para usuarias
 - [ ] Integración con telemedicina real
 - [ ] Notificaciones push para recordar diario de síntomas
 - [ ] Dashboard de administración
+- [ ] API para gestionar artículos dinámicamente
+- [ ] Sistema de comentarios en artículos
 
 ## Arquitectura de Contexto React
 - `AuthContext`: user, isAuthenticated, isLoading, questionnaireAnswers, phenotypeResult
