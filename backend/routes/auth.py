@@ -95,7 +95,10 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     """Get current user information"""
     users = get_users_collection()
     
-    user_doc = await users.find_one({"id": current_user["user_id"]})
+    user_doc = await users.find_one(
+        {"id": current_user["user_id"]},
+        {"id": 1, "name": 1, "email": 1, "birth_date": 1, "created_at": 1, "phenotype_result": 1}
+    )
     if not user_doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
