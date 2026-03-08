@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import Logo from './Logo'
-import { Heart, Home, User, Info, LogOut, BarChart3, Sun, Moon } from 'lucide-react'
+import { Heart, Home, User, LogOut, BarChart3, Sun, Moon, BookOpen, Info } from 'lucide-react'
 import { motion } from 'framer-motion'
 import styles from './Layout.module.css'
 
@@ -31,6 +31,10 @@ const Layout: React.FC = () => {
                   <Home size={18} />
                   <span>Inicio</span>
                 </Link>
+                <Link to="/library" className={styles.navLink} data-testid="nav-library">
+                  <BookOpen size={18} />
+                  <span>Biblioteca</span>
+                </Link>
                 <Link to="/results" className={styles.navLink}>
                   <BarChart3 size={18} />
                   <span>Resultados</span>
@@ -49,6 +53,10 @@ const Layout: React.FC = () => {
                 <Link to="/" className={styles.navLink}>
                   <Home size={18} />
                   <span>Inicio</span>
+                </Link>
+                <Link to="/library" className={styles.navLink} data-testid="nav-library">
+                  <BookOpen size={18} />
+                  <span>Biblioteca</span>
                 </Link>
                 <Link to="/questionnaire" className={styles.navLink}>
                   <Heart size={18} />

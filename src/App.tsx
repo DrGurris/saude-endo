@@ -10,6 +10,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Results from './pages/Results'
 import Portal from './pages/Portal'
+import Library from './pages/Library'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="questionnaire" element={<Questionnaire />} />
                 <Route path="register" element={<Register />} />
                 <Route path="login" element={<Login />} />
+                <Route path="library" element={<Library />} />
                 <Route
                   path="results"
                   element={

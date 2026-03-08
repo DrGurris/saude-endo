@@ -459,6 +459,63 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* ═══ LIBRARY PREVIEW ══════════════════════════════════════════════ */}
+      <section className={styles.libraryPreview}>
+        <div className={styles.infoContainer}>
+          <motion.div
+            className={styles.infoHeader}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2>Biblioteca de Conocimiento</h2>
+            <p>Artículos y recursos para entender y manejar tu endometriosis.</p>
+          </motion.div>
+
+          <motion.div
+            className={styles.libraryGrid}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <motion.div className={styles.libraryCard} variants={slideUp}>
+              <Apple size={28} color="var(--color-success)" />
+              <h3>Nutrición</h3>
+              <p>Dieta antiinflamatoria y alimentos que pueden aliviar síntomas.</p>
+            </motion.div>
+            <motion.div className={styles.libraryCard} variants={slideUp}>
+              <Activity size={28} color="var(--color-accent)" />
+              <h3>Ejercicio</h3>
+              <p>Rutinas suaves y ejercicios adaptados para días de dolor.</p>
+            </motion.div>
+            <motion.div className={styles.libraryCard} variants={slideUp}>
+              <Brain size={28} color="var(--color-info)" />
+              <h3>Bienestar Emocional</h3>
+              <p>Manejo del estrés, ansiedad y cuidado de la salud mental.</p>
+            </motion.div>
+            <motion.div className={styles.libraryCard} variants={slideUp}>
+              <Heart size={28} color="var(--color-secondary)" />
+              <h3>Información Médica</h3>
+              <p>Guías sobre fenotipos, tratamientos y fertilidad.</p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className={styles.libraryAction}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <Link to="/library" className={styles.secondaryBtn} data-testid="library-cta">
+              Explorar Biblioteca <ArrowRight size={18} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ═══ CTA ════════════════════════════════════════════════════════════ */}
       <section className={styles.ctaSection}>
         <motion.div
