@@ -4,13 +4,21 @@
 Plataforma web de salud femenina especializada en endometriosis. Permite a las pacientes evaluar su tipo de dolor (fenotipo), recibir resultados personalizados y acceder a un portal de bienestar basado en 5 pilares de salud.
 
 ## Stack Tecnológico
+### Frontend
 - **Framework**: Vite + React 19 + TypeScript
 - **Routing**: React Router DOM v7
 - **Animaciones**: Framer Motion
 - **Formularios**: React Hook Form + Zod
+- **Gráficos**: Recharts (sparklines para historial de síntomas)
 - **Estilos**: CSS Modules + variables CSS personalizadas
 - **Iconos**: Lucide React
 - **Fuente**: Outfit (Google Fonts)
+
+### Backend
+- **Framework**: FastAPI (Python 3.11)
+- **Base de Datos**: MongoDB (motor async driver)
+- **Autenticación**: JWT (PyJWT)
+- **Validación**: Pydantic v2
 
 ## Paleta de Colores
 - Primary: `#105D77` (azul petróleo)
@@ -22,66 +30,125 @@ Plataforma web de salud femenina especializada en endometriosis. Permite a las p
 ## Arquitectura / Páginas
 | Ruta | Componente | Estado |
 |------|-----------|--------|
-| `/` | Home.tsx | ✅ Mejorado |
-| `/questionnaire` | Questionnaire.tsx | ✅ Mejorado |
-| `/register` | Register.tsx | Sin cambios |
-| `/login` | Login.tsx | Sin cambios |
-| `/results` | Results.tsx (protegida) | Sin cambios |
-| `/portal` | Portal.tsx (protegida) | Sin cambios |
+| `/` | Home.tsx | ✅ Implementado |
+| `/questionnaire` | Questionnaire.tsx | ✅ Implementado |
+| `/register` | Register.tsx | ✅ Implementado |
+| `/login` | Login.tsx | ✅ Implementado |
+| `/results` | Results.tsx (protegida) | ✅ Implementado |
+| `/portal` | Portal.tsx (protegida) | ✅ Implementado |
+
+## API Endpoints
+| Endpoint | Método | Descripción | Auth |
+|----------|--------|-------------|------|
+| `/api/health` | GET | Health check | No |
+| `/api/auth/register` | POST | Registro de usuario | No |
+| `/api/auth/login` | POST | Login de usuario | No |
+| `/api/auth/me` | GET | Obtener usuario actual | Sí |
+| `/api/questionnaire` | POST | Guardar cuestionario | Sí |
+| `/api/questionnaire/results` | GET | Obtener último resultado | Sí |
+| `/api/questionnaire/history` | GET | Historial de cuestionarios | Sí |
+| `/api/symptoms` | POST | Registrar síntoma | Sí |
+| `/api/symptoms` | GET | Listar síntomas | Sí |
+| `/api/symptoms/{date}` | GET | Síntoma por fecha | Sí |
+| `/api/symptoms/{date}` | DELETE | Eliminar síntoma | Sí |
+
+## Modelos de Base de Datos (MongoDB)
+
+### Users Collection
+```json
+{
+  "id": "uuid",
+  "name": "string",
+  "email": "string",
+  "password_hash": "sha256",
+  "birth_date": "YYYY-MM-DD",
+  "created_at": "datetime",
+  "phenotype_result": { ... }
+}
+```
+
+### Symptoms Collection
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "date": "YYYY-MM-DD",
+  "pain": 0-10,
+  "energy": 0-10,
+  "mood": "good|neutral|bad",
+  "notes": "string",
+  "created_at": "datetime"
+}
+```
+
+### Questionnaires Collection
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "answers": { ... },
+  "phenotype_result": { ... },
+  "created_at": "datetime"
+}
+```
 
 ## Lo Implementado
 
-### Sesión 1 - Mejora de Home + Cuestionario (2026-03-04)
+### Sesión 1 - Mejora de UI/UX Frontend
+- Hero split layout con animaciones Framer Motion
+- Cuestionario de 7 pasos con transiciones
+- Dark mode con ThemeContext
+- DatePicker personalizado
+- Testimonios y SEO meta tags
 
-#### Home.tsx — Reescritura completa
-- **Hero split layout**: texto izquierda, imagen (foto mujer real Unsplash) derecha
-- **Floating cards**: tarjetas flotantes glassmorphism sobre la imagen ("Tu dolor es real", "190M mujeres")
-- **Badge animado**: con punto pulsante amarillo
-- **Animaciones staggered**: texto del hero aparece en secuencia con Framer Motion
-- **Trust badges**: "Gratuito / Resultado inmediato / Basado en evidencia"
-- **Background blobs**: elementos decorativos animados en hero
-- **Stats section**: 3 tarjetas (190M / 7-12 / 70%) con animación `scaleIn` al hacer scroll
-- **Pain types**: 3 cards con `border-top` de colores y `staggerContainer` al scroll
-- **Pillars section**: layout 2 columnas - imagen de bienestar (bosque) + lista de pilares con hover slide
-- **How it works**: 3 steps con flechas animadas
-- **CTA section**: gradient card con glows decorativos
+### Sesión 2 - Gráfico Sparkline + Backend (2026-03-08)
+- **SymptomChart.tsx**: Gráfico de líneas con recharts mostrando:
+  - Historial de dolor y energía de 7 días
+  - Análisis de tendencias (mejorando/empeorando/estable)
+  - Sincronización con backend cuando autenticado
 
-#### Questionnaire.tsx — Mejorado
-- **AnimatePresence mode="wait"**: transición slide entre pasos (derecha→izquierda en avance, inverso al retroceder)
-- **Progress dots**: 7 emojis de pasos, activo=amarillo, completado=verde ✓
-- **Progress bar**: gradiente azul→amarillo con animación suave
-- **Radio/Checkbox cards**: micro-animaciones con `whileHover` y `whileTap`
-- **Goal grid**: layout 2 columnas con checkmark animado al seleccionar
-- **Sliders de severidad**: con valor numérico grande y color por área
+- **Backend FastAPI**:
+  - Autenticación JWT completa (registro, login, me)
+  - CRUD de síntomas con persistencia MongoDB
+  - Guardado de cuestionarios y resultados
+  - Modelos Pydantic para validación
 
-#### Setup
-- Framer Motion instalado via npm
-- `/app/frontend/package.json` creado para compatibilidad con supervisor
+- **Integración Frontend-Backend**:
+  - AuthContext refactorizado para usar API real
+  - DiarioModal guarda en localStorage + backend
+  - SymptomChart obtiene datos de backend si autenticado
 
-## Imágenes Usadas
-- **Hero**: Mujer latina con luz dorada (Unsplash - golden hour portrait)
-- **Pillars/Wellbeing**: Mujer meditando en bosque (Unsplash)
+## Testing
+
+### Backend Tests (30 passed)
+- `/app/backend/tests/test_auth.py`
+- `/app/backend/tests/test_symptoms.py`
+- `/app/backend/tests/test_questionnaire.py`
+
+### Frontend E2E Tests (17 passed)
+- `/app/tests/e2e/core-flows.spec.ts`
+- `/app/tests/e2e/auth-flows.spec.ts`
+- `/app/tests/e2e/questionnaire-flow.spec.ts`
 
 ## Backlog / Próximas Iteraciones
-### P0 (Completado) ✅
-- [x] Flujo completo questionnaire → register → results → portal ✅
 
-### P1 (Completado - Sesión 2) ✅
-- [x] Login.tsx y Register.tsx - animaciones Framer Motion ✅
-- [x] Results.tsx: animación de barras de fenotipo al cargar ✅
-- [x] Portal.tsx: staggered cards + HabitCheckbox con SVG animado ✅
+### Pendiente (P1)
+- [ ] Conectar Login/Register pages con el nuevo API
+- [ ] Sincronizar localStorage symptoms existentes al hacer login
+- [ ] Mejorar manejo de errores en formularios
 
-### P2 (Completado - Sesión 3) ✅
-- [x] DatePicker estilizado (3 selects Día/Mes/Año) en paso 3 del cuestionario y registro ✅
-- [x] Dark mode con ThemeContext + toggle Moon/Sun en navbar ✅
-- [x] Persistencia de hábitos del Portal en localStorage ✅
+### Futuras (P2)
+- [ ] Gamificación: insignias y rachas por completar hábitos
+- [ ] Contenido educativo sobre endometriosis
+- [ ] Comunidad / Foro para usuarias
+- [ ] Integración con telemedicina real
 
-### Pendiente
-- [ ] Backend real: autenticación con JWT, persistencia en MongoDB
-- [ ] Módulos completos de cada pilar (contenido de artículos)
-- [ ] Visualización del historial del diario (gráfica de 7 días)
+## Arquitectura de Contexto React
+- `AuthContext`: user, isAuthenticated, isLoading, questionnaireAnswers, phenotypeResult
+- `ThemeContext`: Modo claro/oscuro
+- API URL configurable via VITE_API_URL
 
-## Arquitectura de Contexto
-- `AuthContext`: Maneja user, isAuthenticated, questionnaireAnswers, phenotypeResult
-- Todo el estado de cuestionario es client-side (sin backend)
-- `phenotypeAlgorithm.ts`: Calcula fenotipo dominante (nociceptivo/neuropático/nociplástico/mixto) basado en características de dolor y severidad
+## Imágenes Usadas
+- Hero: Mujer latina con luz dorada (Unsplash)
+- Pillars: Mujer meditando en bosque (Unsplash)
+- Phenotypes: Ilustraciones específicas por tipo de dolor
