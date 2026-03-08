@@ -16,11 +16,11 @@ async def create_symptom_log(
     """Create or update a symptom log entry for a specific date"""
     symptoms = get_symptoms_collection()
     
-    # Check if entry exists for this date
-    existing = await symptoms.find_one({
-        "user_id": current_user["user_id"],
-        "date": data.date
-    })
+    # Check if entry exists for this date (optimized projection)
+    existing = await symptoms.find_one(
+        {"user_id": current_user["user_id"], "date": data.date},
+        {"id": 1, "created_at": 1}
+    )
     
     now = datetime.now(timezone.utc)
     

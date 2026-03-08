@@ -15,8 +15,8 @@ async def register(user_data: UserCreate):
     """Register a new user"""
     users = get_users_collection()
     
-    # Check if email already exists
-    existing_user = await users.find_one({"email": user_data.email})
+    # Check if email already exists (optimized projection)
+    existing_user = await users.find_one({"email": user_data.email}, {"_id": 1})
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -58,8 +58,11 @@ async def login(credentials: UserLogin):
     """Login with email and password"""
     users = get_users_collection()
     
-    # Find user by email
-    user_doc = await users.find_one({"email": credentials.email})
+    # Find user by email (optimized projection)
+    user_doc = await users.find_one(
+        {"email": credentials.email}, 
+        {"id": 1, "password_hash": 1, "name": 1, "email": 1, "birth_date": 1, "created_at": 1, "phenotype_result": 1}
+    )
     if not user_doc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

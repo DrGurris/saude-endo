@@ -79,7 +79,7 @@ async def get_questionnaire_history(current_user: dict = Depends(get_current_use
     
     cursor = questionnaires.find(
         {"user_id": current_user["user_id"]}
-    ).sort("created_at", -1)
+    ).sort("created_at", -1).limit(100)
     
     results = await cursor.to_list(length=100)
     
