@@ -47,7 +47,7 @@ const fieldVariant = {
 
 const Register: React.FC = () => {
   const navigate = useNavigate()
-  const { phenotypeResult, register: authRegister, isAuthenticated } = useAuth()
+  const { phenotypeResult, register: authRegister, isAuthenticated, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -65,6 +65,18 @@ const Register: React.FC = () => {
 
   const watchPassword = watch('password', '')
   const strength = getPasswordStrength(watchPassword)
+
+  // Show loading while checking auth status
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loadingWrapper}>
+          <div className={styles.spinner} />
+          <p>Verificando sesión...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (isAuthenticated) return <Navigate to="/results" replace />
   if (!phenotypeResult) return <Navigate to="/questionnaire" replace />

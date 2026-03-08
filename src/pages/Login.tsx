@@ -25,7 +25,7 @@ const fieldVariant = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useAuth()
+  const { login, isAuthenticated, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState('')
 
@@ -37,6 +37,18 @@ const Login: React.FC = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
+
+  // Show loading while checking auth status
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loadingWrapper}>
+          <div className={styles.spinner} />
+          <p>Verificando sesión...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (isAuthenticated) {
     return <Navigate to="/portal" replace />

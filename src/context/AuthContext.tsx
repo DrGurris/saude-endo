@@ -43,6 +43,57 @@ function saveToSession(key: string, data: unknown): void {
   sessionStorage.setItem(key, JSON.stringify(data))
 }
 
+// Get all symptom entries from localStorage
+function getLocalStorageSymptoms(): Array<{date: string; pain: number; energy: number; mood: string; notes: string}> {
+  const symptoms: Array<{date: string; pain: number; energy: number; mood: string; notes: string}> = []
+  const prefix = 'saude_diario_'
+  
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(prefix)) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key) || '')
+        if (data.date && typeof data.pain === 'number') {
+          symptoms.push(data)
+        }
+      } catch {
+        // Skip invalid entries
+      }
+    }
+  }
+  
+  return symptoms
+}
+
+// Sync localStorage symptoms to backend
+async function syncSymptomsToBackend(token: string): Promise<void> {
+  const localSymptoms = getLocalStorageSymptoms()
+  
+  if (localSymptoms.length === 0) return
+  
+  // Sync each symptom to backend (backend will handle duplicates by date)
+  for (const symptom of localSymptoms) {
+    try {
+      await fetch(`${API_URL}/symptoms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          date: symptom.date,
+          pain: symptom.pain,
+          energy: symptom.energy,
+          mood: symptom.mood,
+          notes: symptom.notes || ''
+        })
+      })
+    } catch (e) {
+      console.error('Error syncing symptom:', e)
+    }
+  }
+}
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -201,6 +252,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (userData.phenotype_result) {
       setPhenotypeResult(userData.phenotype_result)
     }
+
+    // Sync localStorage symptoms to backend in background
+    syncSymptomsToBackend(token).catch(console.error)
   }, [])
 
   const logout = useCallback(() => {
