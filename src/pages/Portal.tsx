@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from 'react'
-import { Activity, BatteryCharging, Apple, Droplets, Smile, ChevronRight, Share2, CalendarDays, BookOpen } from 'lucide-react'
+import { ChevronRight, Share2, CalendarDays, BookOpen } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { GOAL_PILLAR_MAP } from '../types'
@@ -14,9 +14,8 @@ import styles from './Portal.module.css'
 interface PillarData {
   id: PillarId
   title: string
-  icon: React.ReactNode
+  iconImage: string
   color: string
-  bg: string
   habits: string[]
 }
 
@@ -24,41 +23,36 @@ const ALL_PILLARS: PillarData[] = [
   {
     id: 'pain',
     title: 'Maneja tu Dolor',
-    icon: <Activity size={24} />,
+    iconImage: '/images/icons/pillar_pain.webp',
     color: 'var(--color-primary)',
-    bg: 'rgba(16, 93, 119, 0.1)',
     habits: ['Usar TENS (20 min)', 'Ejercicios de suelo pélvico', 'Registrar dolor diario'],
   },
   {
     id: 'energy',
     title: 'Recupera tu Energía',
-    icon: <BatteryCharging size={24} />,
+    iconImage: '/images/icons/pillar_energy.webp',
     color: 'var(--color-success)',
-    bg: 'rgba(42, 157, 143, 0.1)',
     habits: ['Dormir 8 horas', 'Tomar Magnesio/Vit D', 'Caminata ligera (15 min)'],
   },
   {
     id: 'nutrition',
     title: 'Cuida tu Alimentación',
-    icon: <Apple size={24} />,
+    iconImage: '/images/icons/pillar_nutrition.webp',
     color: 'var(--color-secondary)',
-    bg: 'rgba(244, 162, 97, 0.1)',
     habits: ['Comida antiinflamatoria', 'Evitar lácteos/gluten hoy', 'Beber 2L de agua'],
   },
   {
     id: 'hormones',
     title: 'Equilibra tus Hormonas',
-    icon: <Droplets size={24} />,
+    iconImage: '/images/icons/pillar_hormones.webp',
     color: 'var(--color-info)',
-    bg: 'rgba(69, 123, 157, 0.1)',
     habits: ['Registrar ciclo menstrual', 'Tomar medicación a tiempo'],
   },
   {
     id: 'wellbeing',
     title: 'Fortalece tu Bienestar',
-    icon: <Smile size={24} />,
+    iconImage: '/images/icons/pillar_wellbeing.webp',
     color: 'var(--color-accent)',
-    bg: 'rgba(231, 111, 81, 0.1)',
     habits: ['Meditación (10 min)', 'Respiración diafragmática'],
   },
 ]
@@ -70,12 +64,12 @@ const stagger = {
 
 const cardVariant = {
   hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
 // Animated Checkbox Component with localStorage persistence
@@ -263,15 +257,14 @@ const Portal: React.FC = () => {
               data-testid={`pillar-card-${pillar.id}`}
             >
               <div className={styles.pillarHeader}>
-                <motion.div
+                <motion.img
+                  src={pillar.iconImage}
+                  alt=""
                   className={styles.iconWrapper}
-                  style={{ backgroundColor: pillar.bg, color: pillar.color }}
                   initial={{ rotate: -10, scale: 0.8 }}
                   animate={{ rotate: 0, scale: 1 }}
                   transition={{ delay: 0.2 + idx * 0.08, type: 'spring', stiffness: 200 }}
-                >
-                  {pillar.icon}
-                </motion.div>
+                />
                 <h3>{pillar.title}</h3>
               </div>
 

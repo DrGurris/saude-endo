@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { CalendarCheck, Info, ChevronRight, Award, Flame, Zap, Brain, Layers } from 'lucide-react'
+import { CalendarCheck, Info, ChevronRight, Award } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { PHENOTYPE_LABELS, PHENOTYPE_DESCRIPTIONS } from '../types'
@@ -10,31 +10,31 @@ import styles from './Results.module.css'
 
 const PHENOTYPE_VISUALS: Record<PhenotypeType, {
   image: string
-  icon: React.ReactNode
+  icon: string
   tags: string[]
   profile: string
 }> = {
   nociceptive: {
     image: 'https://images.unsplash.com/photo-1552650272-b8a34e21bc4b?w=420&q=80&crop=entropy&cs=srgb',
-    icon: <Flame size={22} />,
+    icon: '/images/icons/pain_nociceptive.webp',
     tags: ['Inflamatorio', 'Cíclico', 'Hormonal'],
     profile: 'Tu dolor responde principalmente a la inflamación y variaciones hormonales del ciclo menstrual.',
   },
   neuropathic: {
     image: 'https://images.unsplash.com/photo-1769238507274-59e0db6c6bbe?w=420&q=80&crop=entropy&cs=srgb',
-    icon: <Zap size={22} />,
+    icon: '/images/icons/pain_neuropathic.webp',
     tags: ['Nervioso', 'Irradiado', 'Eléctrico'],
     profile: 'Los nervios pélvicos están sensibilizados. El tratamiento se enfoca en neuromodulación.',
   },
   nociplastic: {
     image: 'https://images.unsplash.com/photo-1600721391711-58a817124605?w=420&q=80&crop=entropy&cs=srgb',
-    icon: <Brain size={22} />,
+    icon: '/images/icons/pain_nociplastic.webp',
     tags: ['Sensibilización central', 'Sistémico', 'Difuso'],
     profile: 'El sistema nervioso central amplifica el dolor. El abordaje es multidisciplinario mente-cuerpo.',
   },
   mixed: {
     image: 'https://images.unsplash.com/photo-1767884022378-7909a74a15ab?w=420&q=80&crop=entropy&cs=srgb',
-    icon: <Layers size={22} />,
+    icon: '/images/icons/pain_mixed.webp',
     tags: ['Inflamatorio', 'Neuropático', 'Complejo'],
     profile: 'Presentas múltiples componentes. Tu plan requiere un enfoque escalonado y personalizado.',
   },
@@ -47,12 +47,12 @@ const stagger = {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
 }
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.93 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
 interface BarProps {
@@ -143,9 +143,7 @@ const Results: React.FC = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <span className={styles.phenotypeIconBadge} style={{ background: `${details.color}18`, color: details.color }}>
-                  {visual.icon}
-                </span>
+                <img src={visual.icon} alt="" className={styles.phenotypeIconBadge} width={36} height={36} />
                 {visual.tags.map((tag) => (
                   <span key={tag} className={styles.tag} style={{ borderColor: `${details.color}40`, color: details.color }}>
                     {tag}

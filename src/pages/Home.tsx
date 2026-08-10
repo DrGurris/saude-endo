@@ -1,23 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Activity, ArrowRight, PlayCircle,
-  Zap, Brain, Heart, Apple, BatteryCharging, Smile, Droplets,
-  ClipboardCheck, UserPlus, LayoutDashboard, CheckCircle, Star,
+  Activity, ArrowRight, PlayCircle, Calendar,
+  Heart,
+  CheckCircle, Star,
   Quote,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import BookingModal from '../components/BookingModal'
 import styles from './Home.module.css'
 
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1767884022378-7909a74a15ab?w=700&q=85&crop=entropy&cs=srgb'
-const WELLBEING_IMAGE =
-  'https://images.unsplash.com/photo-1769238507274-59e0db6c6bbe?w=600&q=80&crop=entropy&cs=srgb'
+const WELLBEING_IMAGE = '/images/pillars/wellbeing_strength.png'
+
+const STEP_IMAGES = [
+  '/images/onboarding/slide_3_progreso.png',
+  '/images/onboarding/slide_2_registro.png',
+  '/images/onboarding/slide_4_medicacion.png',
+]
+
+const LIBRARY_IMAGES: Record<string, string> = {
+  nutrition: '/images/habits/anti_inflammatory_diet.png',
+  exercise: '/images/habits/pelvic_floor.png',
+  emotional: '/images/habits/meditation.png',
+  medical: '/images/phenotypes/nociceptive.png',
+}
 
 const TESTIMONIALS = [
   {
     name: 'Valentina G.',
-    city: 'Ciudad de México',
+    city: 'Culiacán, Sinaloa',
     age: 32,
     initials: 'VG',
     color: 'var(--color-primary)',
@@ -26,7 +39,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Mariana T.',
-    city: 'Bogotá, Colombia',
+    city: 'Mazatlán, Sinaloa',
     age: 28,
     initials: 'MT',
     color: 'var(--color-success)',
@@ -35,7 +48,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Carolina R.',
-    city: 'Buenos Aires, Argentina',
+    city: 'Los Mochis, Sinaloa',
     age: 35,
     initials: 'CR',
     color: 'var(--color-secondary)',
@@ -44,7 +57,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Sofía M.',
-    city: 'Santiago, Chile',
+    city: 'Guasave, Sinaloa',
     age: 24,
     initials: 'SM',
     color: 'var(--color-accent)',
@@ -61,21 +74,23 @@ const staggerContainer = {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
 }
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.88 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
 const slideUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' as const } },
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────
 const Home: React.FC = () => {
+  const [showBooking, setShowBooking] = useState(false)
+
   return (
     <div className={styles.container}>
 
@@ -247,15 +262,27 @@ const Home: React.FC = () => {
               variants={slideUp}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
             >
-              <div className={`${styles.iconWrapper} ${styles.bgInfo}`}>
-                <Activity size={24} color="var(--color-info)" />
+              <div className={styles.cardImageContainer}>
+                <img
+                  src="/images/phenotypes/nociceptive.png"
+                  alt="Área pélvica con anillos concéntricos de dolor"
+                  className={styles.cardImage}
+                  width={280}
+                  height={180}
+                  loading="lazy"
+                />
               </div>
-              <h3>Nociceptivo (Inflamatorio)</h3>
-              <p>
-                Dolor directamente causado por inflamación y lesiones de endometriosis.
-                Se manifiesta como cólicos intensos, sensibilidad abdominal y dolor que empeora con la menstruación.
-                El tratamiento se enfoca en antiinflamatorios y terapia hormonal.
-              </p>
+              <div className={styles.cardBody}>
+                <div className={styles.cardTitleRow}>
+                  <img src="/images/icons/pain_nociceptive.webp" alt="" className={styles.iconWrapper} width={40} height={40} />
+                  <h3>Nociceptivo (Inflamatorio)</h3>
+                </div>
+                <p>
+                  Dolor directamente causado por inflamación y lesiones de endometriosis.
+                  Se manifiesta como cólicos intensos, sensibilidad abdominal y dolor que empeora con la menstruación.
+                  El tratamiento se enfoca en antiinflamatorios y terapia hormonal.
+                </p>
+              </div>
             </motion.div>
 
             <motion.div
@@ -263,15 +290,27 @@ const Home: React.FC = () => {
               variants={slideUp}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
             >
-              <div className={`${styles.iconWrapper} ${styles.bgAccent}`}>
-                <Zap size={24} color="var(--color-accent)" />
+              <div className={styles.cardImageContainer}>
+                <img
+                  src="/images/phenotypes/neuropathic.png"
+                  alt="Cuerpo con sistema nervioso y rayos en articulaciones"
+                  className={styles.cardImage}
+                  width={280}
+                  height={180}
+                  loading="lazy"
+                />
               </div>
-              <h3>Neuropático (Nervioso)</h3>
-              <p>
-                Los nervios pélvicos están siendo afectados o sensibilizados.
-                Se siente como ardor, descargas eléctricas, dolor punzante que irradia a piernas o espalda.
-                Requiere neuromoduladores y evaluación especializada.
-              </p>
+              <div className={styles.cardBody}>
+                <div className={styles.cardTitleRow}>
+                  <img src="/images/icons/pain_neuropathic.webp" alt="" className={styles.iconWrapper} width={40} height={40} />
+                  <h3>Neuropático (Nervioso)</h3>
+                </div>
+                <p>
+                  Los nervios pélvicos están siendo afectados o sensibilizados.
+                  Se siente como ardor, descargas eléctricas, dolor punzante que irradia a piernas o espalda.
+                  Requiere neuromoduladores y evaluación especializada.
+                </p>
+              </div>
             </motion.div>
 
             <motion.div
@@ -279,15 +318,27 @@ const Home: React.FC = () => {
               variants={slideUp}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
             >
-              <div className={`${styles.iconWrapper} ${styles.bgSuccess}`}>
-                <Brain size={24} color="var(--color-success)" />
+              <div className={styles.cardImageContainer}>
+                <img
+                  src="/images/phenotypes/nociplastic.png"
+                  alt="Cuerpo con cerebro y resplandor coral difuso"
+                  className={styles.cardImage}
+                  width={280}
+                  height={180}
+                  loading="lazy"
+                />
               </div>
-              <h3>Nociplástico (Sensibilización)</h3>
-              <p>
-                El sistema nervioso central amplifica las señales de dolor.
-                Se manifiesta como fatiga extrema, dolor difuso, problemas de sueño y sensibilidad aumentada.
-                Requiere un abordaje multidisciplinario mente-cuerpo.
-              </p>
+              <div className={styles.cardBody}>
+                <div className={styles.cardTitleRow}>
+                  <img src="/images/icons/pain_nociplastic.webp" alt="" className={styles.iconWrapper} width={40} height={40} />
+                  <h3>Nociplástico (Sensibilización)</h3>
+                </div>
+                <p>
+                  El sistema nervioso central amplifica las señales de dolor.
+                  Se manifiesta como fatiga extrema, dolor difuso, problemas de sueño y sensibilidad aumentada.
+                  Requiere un abordaje multidisciplinario mente-cuerpo.
+                </p>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -332,16 +383,15 @@ const Home: React.FC = () => {
               viewport={{ once: true, amount: 0.2 }}
             >
               {[
-                { icon: <Heart size={20} />, title: 'Maneja tu Dolor', sub: 'TENS, suelo pélvico, manejo farmacológico', bg: 'rgba(16,93,119,0.1)', color: 'var(--color-primary)' },
-                { icon: <BatteryCharging size={20} />, title: 'Recupera tu Energía', sub: 'Higiene del sueño, suplementos, ejercicio', bg: 'rgba(42,157,143,0.1)', color: 'var(--color-success)' },
-                { icon: <Apple size={20} />, title: 'Cuida tu Alimentación', sub: 'Dieta antiinflamatoria, endo belly, nutrientes', bg: 'rgba(244,162,97,0.1)', color: 'var(--color-secondary)' },
-                { icon: <Droplets size={20} />, title: 'Equilibra tus Hormonas', sub: 'Ciclo menstrual, fertilidad, balance hormonal', bg: 'rgba(69,123,157,0.1)', color: 'var(--color-info)' },
-                { icon: <Smile size={20} />, title: 'Fortalece tu Bienestar', sub: 'Salud mental, mindfulness, apoyo emocional', bg: 'rgba(231,111,81,0.1)', color: 'var(--color-accent)' },
+                { iconImg: '/images/icons/pillar_pain.webp', title: 'Maneja tu Dolor', sub: 'TENS, suelo pélvico, manejo farmacológico', img: '/images/pillars/pain_management.png' },
+                { iconImg: '/images/icons/pillar_energy.webp', title: 'Recupera tu Energía', sub: 'Higiene del sueño, suplementos, ejercicio', img: '/images/pillars/energy_recovery.png' },
+                { iconImg: '/images/icons/pillar_nutrition.webp', title: 'Cuida tu Alimentación', sub: 'Dieta antiinflamatoria, endo belly, nutrientes', img: '/images/pillars/nutrition_care.png' },
+                { iconImg: '/images/icons/pillar_hormones.webp', title: 'Equilibra tus Hormonas', sub: 'Ciclo menstrual, fertilidad, balance hormonal', img: '/images/pillars/hormonal_balance.png' },
+                { iconImg: '/images/icons/pillar_wellbeing.webp', title: 'Fortalece tu Bienestar', sub: 'Salud mental, mindfulness, apoyo emocional', img: '/images/pillars/wellbeing_strength.png' },
               ].map((p) => (
                 <motion.div key={p.title} className={styles.pillarItem} variants={slideUp}>
-                  <div className={styles.pillarIcon} style={{ backgroundColor: p.bg, color: p.color }}>
-                    {p.icon}
-                  </div>
+                  <img src={p.img} alt={p.title} className={styles.pillarImage} />
+                  <img src={p.iconImg} alt="" className={styles.pillarIcon} width={48} height={48} />
                   <div>
                     <h4>{p.title}</h4>
                     <p>{p.sub}</p>
@@ -376,7 +426,9 @@ const Home: React.FC = () => {
           >
             <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>1</div>
-              <div className={styles.stepIcon}><ClipboardCheck size={32} color="var(--color-primary)" /></div>
+              <div className={styles.stepImageWrapper}>
+                <img src={STEP_IMAGES[0]} alt="Mujer viendo gráfico de progreso" className={styles.stepImg} />
+              </div>
               <h3>Evalúa tu dolor</h3>
               <p>Completa nuestro cuestionario de 7 pasos para identificar tu fenotipo de dolor.</p>
             </motion.div>
@@ -387,7 +439,9 @@ const Home: React.FC = () => {
 
             <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>2</div>
-              <div className={styles.stepIcon}><UserPlus size={32} color="var(--color-endo-yellow-dark)" /></div>
+              <div className={styles.stepImageWrapper}>
+                <img src={STEP_IMAGES[1]} alt="Mujer registrando en diario" className={styles.stepImg} />
+              </div>
               <h3>Crea tu cuenta</h3>
               <p>Regístrate para guardar tus resultados y acceder a contenido personalizado.</p>
             </motion.div>
@@ -398,7 +452,9 @@ const Home: React.FC = () => {
 
             <motion.div className={styles.stepCard} variants={slideUp}>
               <div className={styles.stepNumber}>3</div>
-              <div className={styles.stepIcon}><LayoutDashboard size={32} color="var(--color-success)" /></div>
+              <div className={styles.stepImageWrapper}>
+                <img src={STEP_IMAGES[2]} alt="Mujer con teléfono y notificaciones" className={styles.stepImg} />
+              </div>
               <h3>Accede a tu portal</h3>
               <p>Recibe hábitos, artículos y recomendaciones basadas en tu perfil único.</p>
             </motion.div>
@@ -480,26 +536,23 @@ const Home: React.FC = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <motion.div className={styles.libraryCard} variants={slideUp}>
-              <Apple size={28} color="var(--color-success)" />
-              <h3>Nutrición</h3>
-              <p>Dieta antiinflamatoria y alimentos que pueden aliviar síntomas.</p>
-            </motion.div>
-            <motion.div className={styles.libraryCard} variants={slideUp}>
-              <Activity size={28} color="var(--color-accent)" />
-              <h3>Ejercicio</h3>
-              <p>Rutinas suaves y ejercicios adaptados para días de dolor.</p>
-            </motion.div>
-            <motion.div className={styles.libraryCard} variants={slideUp}>
-              <Brain size={28} color="var(--color-info)" />
-              <h3>Bienestar Emocional</h3>
-              <p>Manejo del estrés, ansiedad y cuidado de la salud mental.</p>
-            </motion.div>
-            <motion.div className={styles.libraryCard} variants={slideUp}>
-              <Heart size={28} color="var(--color-secondary)" />
-              <h3>Información Médica</h3>
-              <p>Guías sobre fenotipos, tratamientos y fertilidad.</p>
-            </motion.div>
+            {[
+              { key: 'nutrition', iconImg: '/images/icons/lib_nutrition.webp', title: 'Nutrición', desc: 'Dieta antiinflamatoria y alimentos que pueden aliviar síntomas.' },
+              { key: 'exercise', iconImg: '/images/icons/lib_exercise.webp', title: 'Ejercicio', desc: 'Rutinas suaves y ejercicios adaptados para días de dolor.' },
+              { key: 'emotional', iconImg: '/images/icons/lib_emotional.webp', title: 'Bienestar Emocional', desc: 'Manejo del estrés, ansiedad y cuidado de la salud mental.' },
+              { key: 'medical', iconImg: '/images/icons/lib_medical.webp', title: 'Información Médica', desc: 'Guías sobre fenotipos, tratamientos y fertilidad.' },
+            ].map(item => (
+              <motion.div key={item.key} className={styles.libraryCard} variants={slideUp}>
+                <img
+                  src={LIBRARY_IMAGES[item.key]}
+                  alt={item.title}
+                  className={styles.libraryCardImage}
+                />
+                <img src={item.iconImg} alt="" className={styles.libraryIcon} width={48} height={48} />
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </motion.div>
+            ))}
           </motion.div>
 
           <motion.div
@@ -533,13 +586,23 @@ const Home: React.FC = () => {
               Durante el mes de concientización, te invitamos a dar el primer paso.
               Realiza nuestro cuestionario gratuito para recibir tu fenotipo pre-evaluado y un pase preferencial a consulta.
             </p>
-            <Link to="/questionnaire" data-testid="cta-section-btn" className={styles.ctaButton}>
-              Iniciar Evaluación <PlayCircle size={18} />
-            </Link>
+            <div className={styles.ctaActions}>
+              <Link to="/questionnaire" data-testid="cta-section-btn" className={styles.ctaButton}>
+                Iniciar Evaluación <PlayCircle size={18} />
+              </Link>
+              <button
+                className={styles.ctaButtonSecondary}
+                onClick={() => setShowBooking(true)}
+                data-testid="cta-booking-btn"
+              >
+                <Calendar size={18} /> Agendar Consulta
+              </button>
+            </div>
           </div>
         </motion.div>
       </section>
 
+      <BookingModal isOpen={showBooking} onClose={() => setShowBooking(false)} />
     </div>
   )
 }
