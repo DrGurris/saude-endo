@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
@@ -11,12 +11,11 @@ export default defineConfig({
     ['json', { outputFile: './test-results/results.json' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'https://487fae61-f217-452f-91af-542583874830.preview.emergentagent.com',
+    baseURL: process.env.BASE_URL || 'http://localhost:5173',
     screenshot: 'on',
     trace: 'on-first-retry',
     headless: true,
-    viewport: { width: 1920, height: 1080 },
-    ignoreHTTPSErrors: true,
+    viewport: { width: 1280, height: 720 },
   },
   projects: [
     {
@@ -24,4 +23,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-});
+  webServer: {
+    command: 'npm run dev',
+    port: 5173,
+    reuseExistingServer: true,
+    timeout: 30_000,
+  },
+})
