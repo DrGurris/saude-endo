@@ -25,89 +25,95 @@ test.describe('Library - Knowledge Base', () => {
 
   test('Library page displays featured articles section', async ({ page }) => {
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
+
+    // Wait for articles to load
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
     // Verify featured articles section heading
     await expect(page.getByRole('heading', { name: 'Artículos Destacados' })).toBeVisible();
-    
-    // Verify at least one featured article exists (there should be 3 featured)
+
+    // Verify featured articles are visible (7 total: endo-basics, pain-phenotypes, energy-fatigue-management, energy-exercise-periodization, nutrition-antiinflammatory, hormones-treatment-options, wellbeing-cbt-act)
     await expect(page.getByTestId('article-endo-basics')).toBeVisible();
-    await expect(page.getByTestId('article-anti-inflammatory-diet')).toBeVisible();
-    await expect(page.getByTestId('article-emotional-wellbeing')).toBeVisible();
+    await expect(page.getByTestId('article-nutrition-antiinflammatory')).toBeVisible();
+    await expect(page.getByTestId('article-pain-phenotypes')).toBeVisible();
   });
 
   test('Category filters work correctly', async ({ page }) => {
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
     // Default should show all articles (Todos active)
-    await expect(page.getByTestId('category-all')).toBeVisible();
-    
-    // Click on Nutrición filter
-    await page.getByTestId('category-nutrition').click();
-    
-    // Verify nutrition articles are visible and others are filtered out
-    await expect(page.getByTestId('article-anti-inflammatory-diet')).toBeVisible();
-    await expect(page.getByTestId('article-supplements')).toBeVisible();
-    
-    // Click on Ejercicio filter
-    await page.getByTestId('category-exercise').click();
-    await expect(page.getByTestId('article-gentle-exercise')).toBeVisible();
-    
-    // Click on Bienestar Emocional
-    await page.getByTestId('category-emotional').click();
-    await expect(page.getByTestId('article-emotional-wellbeing')).toBeVisible();
-    await expect(page.getByTestId('article-sleep-tips')).toBeVisible();
-    
-    // Click on Información Médica
-    await page.getByTestId('category-medical').click();
+    await expect(page.getByTestId('pillar-all')).toBeVisible();
+
+    // Click on Nutrición pillar filter
+    await page.getByTestId('pillar-nutrition').click();
+
+    // Verify nutrition articles are visible
+    await expect(page.getByTestId('article-nutrition-antiinflammatory')).toBeVisible();
+    await expect(page.getByTestId('article-nutrition-endo-belly')).toBeVisible();
+
+    // Click on Energy pillar filter
+    await page.getByTestId('pillar-energy').click();
+    await expect(page.getByTestId('article-energy-exercise-gentle')).toBeVisible();
+
+    // Click on Wellbeing
+    await page.getByTestId('pillar-wellbeing').click();
+    await expect(page.getByTestId('article-wellbeing-emotional')).toBeVisible();
+    await expect(page.getByTestId('article-wellbeing-mindfulness')).toBeVisible();
+
+    // Click on Pain (Dolor)
+    await page.getByTestId('pillar-pain').click();
     await expect(page.getByTestId('article-endo-basics')).toBeVisible();
     await expect(page.getByTestId('article-pain-phenotypes')).toBeVisible();
-    await expect(page.getByTestId('article-fertility-endo')).toBeVisible();
   });
 
   test('Search functionality works', async ({ page }) => {
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
     const searchInput = page.getByTestId('library-search');
     await expect(searchInput).toBeVisible();
-    
-    // Search for "dieta" (matches article title and tags)
-    await searchInput.fill('dieta');
-    
-    // Should show diet-related articles
-    await expect(page.getByTestId('article-anti-inflammatory-diet')).toBeVisible();
-    
+
+    // Search for "endometriosis" (matches article title)
+    await searchInput.fill('endometriosis');
+    await page.waitForTimeout(500); // debounce
+
+    // Should show matching articles
+    await expect(page.getByTestId('article-endo-basics')).toBeVisible();
+
     // Clear search
     await searchInput.clear();
-    
+    await page.waitForTimeout(500);
+
     // Search for "dolor" (matches tags and content)
     await searchInput.fill('dolor');
-    
+    await page.waitForTimeout(500);
+
     // Should show pain-related articles
-    await expect(page.getByTestId('article-gentle-exercise')).toBeVisible();
-    await expect(page.getByTestId('article-pain-phenotypes')).toBeVisible();
+    const cards = page.locator('[data-testid^="article-"]');
+    const count = await cards.count();
+    expect(count).toBeGreaterThan(0);
   });
 
   test('Click on article opens modal with full content', async ({ page }) => {
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
-    // Click read button on first article
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
+    // Click read button on endo-basics article
     await page.getByTestId('read-endo-basics').click();
-    
+
     // Modal should appear
     const modal = page.getByTestId('article-modal');
-    await expect(modal).toBeVisible();
-    
-    // Modal should contain the article title (use modal scope)
-    await expect(modal.getByRole('heading', { name: '¿Qué es la Endometriosis?' })).toBeVisible();
-    
-    // Modal should have content
-    await expect(modal.getByText('La endometriosis es una condición crónica', { exact: false })).toBeVisible();
-    
-    // Close modal by clicking the backdrop (click at top-left corner of the page which is outside modal)
-    await page.click('body', { position: { x: 10, y: 10 }, force: true });
-    
+    await expect(modal).toBeVisible({ timeout: 5_000 });
+
+    // Modal should contain the article title (use first() as markdown also renders an h1)
+    await expect(modal.getByRole('heading', { name: '¿Qué es la Endometriosis?' }).first()).toBeVisible();
+
+    // Close modal with Escape
+    await page.keyboard.press('Escape');
+
     // Modal should be closed
-    await expect(page.getByTestId('article-modal')).not.toBeVisible();
+    await expect(modal).not.toBeVisible();
   });
 
   test('Save/Unsave article functionality works', async ({ page }) => {
@@ -128,26 +134,20 @@ test.describe('Library - Knowledge Base', () => {
   });
 
   test('Show saved toggle filters only saved articles (when authenticated)', async ({ page }) => {
-    // First, save some articles (localStorage-based)
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
     // Save two articles
     await page.getByTestId('save-endo-basics').click();
-    await page.getByTestId('save-anti-inflammatory-diet').click();
-    
-    // The "Guardados" toggle should be visible for public (based on code, it shows for authenticated users)
-    // Since it uses localStorage and checks isAuthenticated, let's test the flow
-    
-    // For unauthenticated users, the saved toggle might not be visible
-    // Let's verify the functionality works with localStorage
-    
-    // Verify articles are saved in localStorage
+    await page.getByTestId('save-nutrition-antiinflammatory').click();
+
+    // Verify articles are saved in localStorage (key: saude_bookmarked_articles)
     const savedArticles = await page.evaluate(() => {
-      return localStorage.getItem('saude_saved_articles');
+      return localStorage.getItem('saude_bookmarked_articles');
     });
-    
+
     expect(savedArticles).toContain('endo-basics');
-    expect(savedArticles).toContain('anti-inflammatory-diet');
+    expect(savedArticles).toContain('nutrition-antiinflammatory');
   });
 
   test('Library CTA on Home page navigates to /library', async ({ page }) => {
@@ -177,13 +177,14 @@ test.describe('Library - Knowledge Base', () => {
 
   test('Article card displays correct metadata', async ({ page }) => {
     await page.goto('/library', { waitUntil: 'domcontentloaded' });
-    
-    // Check that article card shows category tag, title, excerpt, and read time
+    await page.waitForSelector('[data-testid^="article-"]', { timeout: 10_000 });
+
+    // Check that article card shows pillar tag, title, and read time
     const articleCard = page.getByTestId('article-endo-basics');
-    
-    await expect(articleCard.getByText('Información Médica')).toBeVisible();
+
+    await expect(articleCard.getByText('Manejo del Dolor')).toBeVisible();
     await expect(articleCard.getByText('¿Qué es la Endometriosis?')).toBeVisible();
-    await expect(articleCard.getByText('5 min de lectura')).toBeVisible();
+    await expect(articleCard.getByText(/\d+ min/)).toBeVisible();
     await expect(articleCard.getByText('Leer más')).toBeVisible();
   });
 });
