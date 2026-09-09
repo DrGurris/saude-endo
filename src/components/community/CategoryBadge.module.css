@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pain {
+  background: rgba(16, 93, 119, 0.1);
+  color: var(--color-primary);
+}
+
+.energy {
+  background: rgba(42, 157, 143, 0.1);
+  color: var(--color-success);
+}
+
+.nutrition {
+  background: rgba(244, 162, 97, 0.12);
+  color: #c47a30;
+}
+
+.hormones {
+  background: rgba(69, 123, 157, 0.1);
+  color: var(--color-info);
+}
+
+.wellbeing {
+  background: rgba(231, 111, 81, 0.1);
+  color: var(--color-accent);
+}
+
+.general {
+  background: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+}

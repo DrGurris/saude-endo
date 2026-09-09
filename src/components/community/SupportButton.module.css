@@ -1,0 +1,29 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-surface-hover);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.button:hover:not(:disabled) {
+  color: var(--color-accent);
+  border-color: rgba(231, 111, 81, 0.3);
+}
+
+.active {
+  color: var(--color-accent);
+  background: rgba(231, 111, 81, 0.1);
+  border-color: rgba(231, 111, 81, 0.2);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

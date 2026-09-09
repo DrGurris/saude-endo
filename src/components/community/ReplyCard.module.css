@@ -1,0 +1,59 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.nested {
+  margin-left: 2rem;
+  border-left: 3px solid var(--color-primary);
+}
+
+.nestIcon {
+  position: absolute;
+  left: -1.5rem;
+  top: 1.25rem;
+  color: var(--color-primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.body {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reportBtn {
+  color: var(--color-text-muted);
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+}
+
+.reportBtn:hover {
+  opacity: 1;
+  color: var(--color-accent);
+}
