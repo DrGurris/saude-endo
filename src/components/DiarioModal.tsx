@@ -119,7 +119,7 @@ const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={() => onClose()}
             aria-hidden="true"
           />
 
@@ -143,7 +143,7 @@ const DiarioModal: React.FC<DiarioModalProps> = ({ isOpen, onClose }) => {
                   <p className={styles.dateLabel}>{dateLabel}</p>
                 </div>
               </div>
-              <button className={styles.closeBtn} onClick={onClose} aria-label="Cerrar diario">
+              <button className={styles.closeBtn} onClick={() => onClose()} aria-label="Cerrar diario">
                 <X size={20} />
               </button>
             </div>

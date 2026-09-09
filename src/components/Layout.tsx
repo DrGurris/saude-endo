@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import Logo from './Logo'
-import { Heart, Home, User, LogOut, BarChart3, Sun, Moon, BookOpen, Info } from 'lucide-react'
+import { Heart, Home, User, LogOut, BarChart3, Sun, Moon, BookOpen, Info, MessageSquare, Shield } from 'lucide-react'
 import { motion } from 'framer-motion'
 import styles from './Layout.module.css'
 
@@ -35,6 +35,10 @@ const Layout: React.FC = () => {
                   <BookOpen size={18} />
                   <span>Biblioteca</span>
                 </Link>
+                <Link to="/community" className={styles.navLink}>
+                  <MessageSquare size={18} />
+                  <span>Comunidad</span>
+                </Link>
                 <Link to="/results" className={styles.navLink}>
                   <BarChart3 size={18} />
                   <span>Resultados</span>
@@ -43,6 +47,12 @@ const Layout: React.FC = () => {
                   <User size={18} />
                   <span>Portal</span>
                 </Link>
+                {user?.role === 'admin' && (
+                  <Link to="/admin" className={styles.navLink}>
+                    <Shield size={18} />
+                    <span>Admin</span>
+                  </Link>
+                )}
                 <button onClick={handleLogout} className={styles.navLink}>
                   <LogOut size={18} />
                   <span>{user?.name?.split(' ')[0] ?? 'Salir'}</span>
@@ -57,6 +67,10 @@ const Layout: React.FC = () => {
                 <Link to="/library" className={styles.navLink} data-testid="nav-library">
                   <BookOpen size={18} />
                   <span>Biblioteca</span>
+                </Link>
+                <Link to="/community" className={styles.navLink}>
+                  <MessageSquare size={18} />
+                  <span>Comunidad</span>
                 </Link>
                 <Link to="/questionnaire" className={styles.navLink}>
                   <Heart size={18} />
@@ -96,8 +110,8 @@ const Layout: React.FC = () => {
       <footer className={styles.footer}>
         <p>&copy; 2026 Saude Cl&iacute;nica de la Mujer. Mes de Concientizaci&oacute;n en Endometriosis.</p>
         <div className={styles.footerLinks}>
-          <a href="#"><Info size={14} /> T&eacute;rminos</a>
-          <a href="#">Privacidad</a>
+          <Link to="/terms"><Info size={14} /> T&eacute;rminos</Link>
+          <Link to="/privacy">Privacidad</Link>
         </div>
       </footer>
     </div>

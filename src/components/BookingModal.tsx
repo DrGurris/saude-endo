@@ -54,8 +54,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     setSubmitted(true)
   }
 
-  const minDate = new Date(); minDate.setDate(minDate.getDate() + 1)
-  const minDateStr = minDate.toISOString().split('T')[0]
   const maxDate = new Date(); maxDate.setMonth(maxDate.getMonth() + 3)
   const maxDateStr = maxDate.toISOString().split('T')[0]
 
@@ -77,7 +75,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.92, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 30 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: 0.3, ease: 'easeOut' as const }}
             role="dialog"
             aria-modal="true"
             aria-label="Agendar cita"

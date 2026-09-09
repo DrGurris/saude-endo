@@ -33,7 +33,7 @@ const PASSWORD_RULES = [
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: 'easeOut' as const } },
 }
 
 const stagger = {
@@ -43,7 +43,7 @@ const stagger = {
 
 const fieldVariant = {
   hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 }
 
 const Register: React.FC = () => {
@@ -245,7 +245,7 @@ const Register: React.FC = () => {
 
           <motion.label className={styles.checkboxLabel} variants={fieldVariant}>
             <input type="checkbox" data-testid="register-terms" {...register('acceptTerms')} />
-            <span>Acepto los <a href="#" className={styles.link}>términos y condiciones</a> y la <a href="#" className={styles.link}>política de privacidad</a></span>
+            <span>Acepto los <Link to="/terms" className={styles.link} target="_blank">terminos y condiciones</Link> y la <Link to="/privacy" className={styles.link} target="_blank">politica de privacidad</Link></span>
           </motion.label>
           {errors.acceptTerms && <span className={styles.fieldError}>{errors.acceptTerms.message}</span>}
 

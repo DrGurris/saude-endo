@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
-import type { User, QuestionnaireAnswers, PhenotypeResult } from '../types'
+import type { User, UserRole, QuestionnaireAnswers, PhenotypeResult } from '../types'
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 
@@ -27,6 +27,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 const TOKEN_KEY = 'saude_token'
+const ADMIN_BOOTSTRAP_KEY = 'saude_admin_bootstrap'
 const SESSION_ANSWERS_KEY = 'saude_questionnaire_answers'
 const SESSION_RESULT_KEY = 'saude_phenotype_result'
 
@@ -129,7 +130,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             name: userData.name,
             email: userData.email,
             birthDate: userData.birth_date,
-            createdAt: userData.created_at
+            createdAt: userData.created_at,
+            role: (userData.role as UserRole) || 'user',
           })
           if (userData.phenotype_result) {
             setPhenotypeResult(userData.phenotype_result)
@@ -192,13 +194,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { token, user: userData } = await response.json()
     
     localStorage.setItem(TOKEN_KEY, token)
-    
+
+    // Bootstrap: first registered user gets admin role
+    const isFirstUser = !localStorage.getItem(ADMIN_BOOTSTRAP_KEY)
+    const assignedRole: UserRole = isFirstUser ? 'admin' : ((userData.role as UserRole) || 'user')
+    if (isFirstUser) {
+      localStorage.setItem(ADMIN_BOOTSTRAP_KEY, 'true')
+    }
+
     setUser({
       id: userData.id,
       name: userData.name,
       email: userData.email,
       birthDate: userData.birth_date,
-      createdAt: userData.created_at
+      createdAt: userData.created_at,
+      role: assignedRole,
     })
 
     // Save questionnaire data to backend if available
@@ -248,7 +258,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: userData.name,
       email: userData.email,
       birthDate: userData.birth_date,
-      createdAt: userData.created_at
+      createdAt: userData.created_at,
+      role: (userData.role as UserRole) || 'user',
     })
 
     if (userData.phenotype_result) {
