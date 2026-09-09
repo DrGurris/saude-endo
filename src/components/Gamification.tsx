@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trophy, Flame, Star, Target, Award, Calendar, Heart, Zap, CheckCircle2, X } from 'lucide-react'
+import { Trophy, Flame, Star, Target, Award, Calendar, Heart, Zap, CheckCircle2, X, MessageCircle, BookOpen, Users } from 'lucide-react'
+import { getGamificationData, type GamificationData } from '../services/gamificationService'
 import styles from './Gamification.module.css'
 
 interface Badge {
@@ -13,91 +14,6 @@ interface Badge {
   unlockedAt?: string
   progress?: number
   total?: number
-}
-
-interface GamificationData {
-  currentStreak: number
-  longestStreak: number
-  totalDaysLogged: number
-  habitsCompletedToday: number
-  totalHabitsCompleted: number
-}
-
-// Helper to get streak data from localStorage
-function getGamificationData(): GamificationData {
-  const symptomPrefix = 'saude_diario_'
-  const habitPrefix = 'saude_habit_'
-  
-  let totalDaysLogged = 0
-  let currentStreak = 0
-  let longestStreak = 0
-  let habitsCompletedToday = 0
-  let totalHabitsCompleted = 0
-  
-  // Count symptom logs and calculate streak
-  const dates: string[] = []
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i)
-    if (key?.startsWith(symptomPrefix)) {
-      const date = key.replace(symptomPrefix, '')
-      dates.push(date)
-      totalDaysLogged++
-    }
-    if (key?.startsWith(habitPrefix)) {
-      const value = localStorage.getItem(key)
-      if (value === 'true') {
-        totalHabitsCompleted++
-        // Check if it's today
-        if (key.includes(new Date().toISOString().split('T')[0])) {
-          habitsCompletedToday++
-        }
-      }
-    }
-  }
-  
-  // Sort dates and calculate streak
-  dates.sort((a, b) => b.localeCompare(a)) // Most recent first
-  
-  if (dates.length > 0) {
-    const today = new Date().toISOString().split('T')[0]
-    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
-    
-    // Check if user logged today or yesterday to start streak
-    if (dates[0] === today || dates[0] === yesterday) {
-      currentStreak = 1
-      let prevDate = new Date(dates[0])
-      
-      for (let i = 1; i < dates.length; i++) {
-        const currDate = new Date(dates[i])
-        const diffDays = Math.floor((prevDate.getTime() - currDate.getTime()) / 86400000)
-        
-        if (diffDays === 1) {
-          currentStreak++
-          prevDate = currDate
-        } else {
-          break
-        }
-      }
-    }
-    
-    // Calculate longest streak
-    let tempStreak = 1
-    for (let i = 1; i < dates.length; i++) {
-      const prev = new Date(dates[i - 1])
-      const curr = new Date(dates[i])
-      const diffDays = Math.floor((prev.getTime() - curr.getTime()) / 86400000)
-      
-      if (diffDays === 1) {
-        tempStreak++
-      } else {
-        longestStreak = Math.max(longestStreak, tempStreak)
-        tempStreak = 1
-      }
-    }
-    longestStreak = Math.max(longestStreak, tempStreak, currentStreak)
-  }
-  
-  return { currentStreak, longestStreak, totalDaysLogged, habitsCompletedToday, totalHabitsCompleted }
 }
 
 function getBadges(data: GamificationData): Badge[] {
@@ -155,20 +71,61 @@ function getBadges(data: GamificationData): Badge[] {
     {
       id: 'consistent',
       name: 'Consistente',
-      description: 'Registra 14 días en total',
+      description: 'Registra 14 dias en total',
       icon: <Calendar size={24} />,
       color: 'var(--color-secondary)',
       unlocked: data.totalDaysLogged >= 14,
       progress: Math.min(data.totalDaysLogged, 14),
       total: 14,
     },
+    // ─── Community Badges ────────────────────────────────────────────────
+    {
+      id: 'first_post',
+      name: 'Primera Voz',
+      description: 'Crea tu primer hilo en la comunidad',
+      icon: <MessageCircle size={24} />,
+      color: 'var(--color-primary)',
+      unlocked: data.totalPosts >= 1,
+      progress: Math.min(data.totalPosts, 1),
+      total: 1,
+    },
+    {
+      id: 'helpful_reply',
+      name: 'Respuesta Solidaria',
+      description: 'Recibe 5 apoyos en tus respuestas',
+      icon: <Heart size={24} />,
+      color: 'var(--color-accent)',
+      unlocked: data.totalSupportsReceived >= 5,
+      progress: Math.min(data.totalSupportsReceived, 5),
+      total: 5,
+    },
+    {
+      id: 'community_star',
+      name: 'Estrella Comunitaria',
+      description: '10 publicaciones y 20 apoyos recibidos',
+      icon: <Users size={24} />,
+      color: 'var(--color-endo-yellow)',
+      unlocked: data.totalPosts >= 10 && data.totalSupportsReceived >= 20,
+      progress: Math.min(data.totalPosts, 10) + Math.min(data.totalSupportsReceived, 20),
+      total: 30,
+    },
+    {
+      id: 'knowledge_seeker',
+      name: 'Buscadora de Conocimiento',
+      description: 'Lee 10 articulos de la biblioteca',
+      icon: <BookOpen size={24} />,
+      color: 'var(--color-info)',
+      unlocked: data.totalArticlesRead >= 10,
+      progress: Math.min(data.totalArticlesRead, 10),
+      total: 10,
+    },
   ]
 }
 
 // Streak Card Component
 export const StreakCard: React.FC<{ onShowBadges?: () => void }> = ({ onShowBadges }) => {
-  const data = useMemo(() => getGamificationData(), [])
-  const badges = useMemo(() => getBadges(data), [data])
+  const data = getGamificationData()
+  const badges = getBadges(data)
   const unlockedCount = badges.filter(b => b.unlocked).length
 
   return (
@@ -226,8 +183,8 @@ export const StreakCard: React.FC<{ onShowBadges?: () => void }> = ({ onShowBadg
 
 // Badges Modal Component
 export const BadgesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const data = useMemo(() => getGamificationData(), [])
-  const badges = useMemo(() => getBadges(data), [data])
+  const data = getGamificationData()
+  const badges = getBadges(data)
 
   return (
     <AnimatePresence>
@@ -286,7 +243,7 @@ export const BadgesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = (
                       color: badge.unlocked ? badge.color : 'var(--color-text-muted)'
                     }}
                   >
-                    {badge.unlocked ? badge.icon : badge.icon}
+                    {badge.icon}
                     {badge.unlocked && (
                       <motion.div 
                         className={styles.checkmark}
