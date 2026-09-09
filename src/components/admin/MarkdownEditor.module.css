@@ -1,0 +1,112 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.toolbar {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  overflow: hidden;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: var(--color-surface-hover);
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.activeTab {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 250px;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(16, 93, 119, 0.1);
+}
+
+.hasError {
+  border-color: var(--color-accent);
+}
+
+.preview {
+  border: 1px solid var(--color-border);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--color-surface);
+  padding: 1rem;
+  min-height: 250px;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+}
+
+.preview h1,
+.preview h2,
+.preview h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.preview p {
+  margin-bottom: 0.75rem;
+}
+
+.preview ul,
+.preview ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.preview blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1rem;
+  color: var(--color-text-secondary);
+  margin: 0.75rem 0;
+}
+
+.emptyPreview {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.error {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+}

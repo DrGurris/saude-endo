@@ -1,0 +1,88 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--color-text-muted);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.roleSelect {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.roleSelect:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.actionBtnWarn,
+.actionBtnDanger,
+.actionBtnSuccess {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.actionBtnWarn {
+  background: rgba(244, 162, 97, 0.15);
+  color: #c47a30;
+}
+
+.actionBtnDanger {
+  background: rgba(231, 111, 81, 0.12);
+  color: #b84a2e;
+}
+
+.actionBtnSuccess {
+  background: rgba(42, 157, 143, 0.12);
+  color: #1a7a6f;
+}
+
+.actionBtnWarn:hover,
+.actionBtnDanger:hover,
+.actionBtnSuccess:hover {
+  opacity: 0.8;
+}
